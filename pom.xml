@@ -106,10 +106,10 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<!-- 仅适合新数据库。 数据库脚本迁移管理 -->
-		<dependency>
+<!-- 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
-		</dependency>
+		</dependency> -->
 		<!-- shiro权限控制框架 -->
 		<!--shiro依赖 -->
 		<dependency>
