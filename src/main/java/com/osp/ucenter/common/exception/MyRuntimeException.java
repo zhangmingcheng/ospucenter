@@ -1,5 +1,4 @@
-package com.osp.ucenter.common.exception;
-
+﻿package com.osp.ucenter.common.exception;
 public class MyRuntimeException extends RuntimeException {
 
 	private static final long serialVersionUID = -3537109711029547957L;
