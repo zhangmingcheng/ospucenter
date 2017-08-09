@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+  <classPathEntry    location="D:\workspace\git\HejorServer\WebContent\WEB-INF\lib\mysql-connector-java-5.0.8-bin.jar"/>
+  
+  <context id="context1">
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost/ospucenter" userId="root" 
+        	password="root" />
+    <javaModelGenerator targetPackage="com.osp.ucenter.persistence.model" targetProject="ospUcenter">
+      <property name="enableSubPackages" value="true"/>
+      <property name="trimStrings" value="true"/>
+     </javaModelGenerator>
+    
+    
+      <sqlMapGenerator targetPackage="com.osp.ucenter.persistence.dao.mapping" targetProject="ospUcenter">
+          <property name="enableSubPackages" value="true"/>
+      </sqlMapGenerator>
+        
+      <javaClientGenerator type="XMLMAPPER" targetPackage="com.osp.ucenter.persistence.dao" targetProject="ospUcenter">
+          <property name="enableSubPackages" value="true"/>
+      </javaClientGenerator>  
+        
+<!--      <table tableName="uc_user" domainObjectName="UcUser" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" 
+            enableSelectByExample="false" selectByExampleQueryId="false">
+     </table> -->
+     <table tableName="uc_action" domainObjectName="UcAction" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" 
+            enableSelectByExample="false" selectByExampleQueryId="false">
+     </table>
+     <table tableName="uc_menu" domainObjectName="UcMenu" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" 
+            enableSelectByExample="false" selectByExampleQueryId="false">
+     </table>
+     <table tableName="uc_permission" domainObjectName="UcPermission" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" 
+            enableSelectByExample="false" selectByExampleQueryId="false">
+     </table>
+     <table tableName="uc_permission_action" domainObjectName="UcPermissionAction" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" 
+            enableSelectByExample="false" selectByExampleQueryId="false">
+     </table>
+     <table tableName="uc_role" domainObjectName="UcRole" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" 
+            enableSelectByExample="false" selectByExampleQueryId="false">
+     </table>
+     <table tableName="uc_system" domainObjectName="UcSystem" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" 
+            enableSelectByExample="false" selectByExampleQueryId="false">
+     </table>
+     <table tableName="uc_user_role" domainObjectName="UcUserRole" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" 
+            enableSelectByExample="false" selectByExampleQueryId="false">
+     </table>
+  </context>
+</generatorConfiguration>
