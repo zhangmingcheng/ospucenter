@@ -9,19 +9,18 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
- * 
- * @author fly
- *
+ * 用户登录注册
+ * @author zhangmingcheng
  */
 @Controller
+@RequestMapping(value="/user")
 public class LoginController {
-	
-	@RequestMapping(value="/login", method = RequestMethod.GET)
+
+	@RequestMapping(value="/login")
 	@ResponseBody
 	public String login(HttpServletRequest request, HttpSession session, RedirectAttributes attr) {
 		try {

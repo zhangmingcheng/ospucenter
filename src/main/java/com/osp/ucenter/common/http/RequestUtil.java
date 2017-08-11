@@ -6,11 +6,12 @@ import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 
 import com.osp.ucenter.common.exception.MyRuntimeException;
-import com.osp.ucenter.common.tools.StringUtil;
+import com.osp.ucenter.common.tools.StringUtils;
+
+
 
 
  
@@ -174,7 +175,7 @@ public class RequestUtil {
         try {
             String string = StringUtils.trimToEmpty(request.getParameter(key));
 
-            if (StringUtil.empty(string)) {
+            if (StringUtils.empty(string)) {
                 if (isAllowEmpty) {
                     if (defaultValue != null) {
                         string = defaultValue.toString();
@@ -218,7 +219,7 @@ public class RequestUtil {
         try {
             String string = StringUtils.trimToEmpty(request.getParameter(key)).trim();
 
-            if (StringUtil.empty(string)) {
+            if (StringUtils.empty(string)) {
                 if (isAllowEmpty) {
                     if (defaultValue != null) {
                         string = defaultValue.toString();
@@ -251,7 +252,7 @@ public class RequestUtil {
         try {
             String string = StringUtils.trimToEmpty(request.getParameter(key)).trim();
 
-            if (StringUtil.empty(string)) {
+            if (StringUtils.empty(string)) {
                 if (isAllowEmpty) {
                     if (defaultValue != null) {
                         string = defaultValue.toString();

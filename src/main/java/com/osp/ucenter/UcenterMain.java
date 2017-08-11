@@ -1,8 +1,7 @@
-package com.osp.ucenter.main;
+package com.osp.ucenter;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
 /**
  * 2017/08/02
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.ComponentScan;
  */
 //@EnableAutoConfiguration
 @SpringBootApplication
-@ComponentScan("com.osp.ucenter")
 public class UcenterMain {
 
 	public static void main(String[] args) {

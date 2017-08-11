@@ -52,6 +52,7 @@ public class MyAuthorizingRealm extends AuthorizingRealm {
 
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0) {
+		System.out.println("你是猪吗?");
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 public class Currentime {
 
 	public static String getCurrentTime() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		java.util.Date date = new java.util.Date();
 		return sdf.format(date);
 	}

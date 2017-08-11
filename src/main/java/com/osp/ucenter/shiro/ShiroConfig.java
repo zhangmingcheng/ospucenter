@@ -1,8 +1,5 @@
 package com.osp.ucenter.shiro;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
