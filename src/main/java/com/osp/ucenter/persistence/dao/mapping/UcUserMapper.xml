@@ -34,6 +34,12 @@
     from uc_user
     where user_id = #{userId,jdbcType=INTEGER}
   </select>
+  <select id="login" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from uc_user
+    where user_name = #{username} and user_pwd = #{password}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--
       WARNING - @mbg.generated
