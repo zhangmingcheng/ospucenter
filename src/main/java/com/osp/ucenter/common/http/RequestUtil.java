@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 
 import com.osp.ucenter.common.exception.MyRuntimeException;
-import com.osp.ucenter.common.tools.StringUtils;
+import com.osp.ucenter.common.utils.StringUtils;
 
 
 

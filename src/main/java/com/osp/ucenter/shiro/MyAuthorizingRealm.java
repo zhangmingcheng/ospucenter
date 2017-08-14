@@ -11,7 +11,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.osp.ucenter.common.tools.Currentime;
+import com.osp.ucenter.common.utils.BaseUtils;
 import com.osp.ucenter.persistence.model.UcUser;
 import com.osp.ucenter.service.UcUserService;
 
@@ -43,7 +43,7 @@ public class MyAuthorizingRealm extends AuthorizingRealm {
 			throw new AccountException("帐号或密码不正确！");
 		} else {
 			// 更新最后一次登录时间 
-			user.setLastLoginTime(Currentime.getCurrentTime());
+			user.setLastLoginTime(BaseUtils.getCurrentTime());
 			ucUserService.updateByPrimaryKeySelective(user);
 		}
 		return new SimpleAuthenticationInfo(username,user.getUserPwd(),getName());

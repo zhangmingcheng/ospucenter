@@ -40,6 +40,12 @@
     from uc_user
     where user_name = #{username} and user_pwd = #{password}
   </select>
+   <select id="findUser" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from uc_user
+    where user_name = #{username} and systemcode = #{systemcode}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--
       WARNING - @mbg.generated

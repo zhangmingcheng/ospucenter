@@ -14,9 +14,9 @@ public interface UcUserService {
 	
 	int deleteByPrimaryKey(Long id);
 
-	UcUser insert(UcUser record);
+	int insert(UcUser record);
 
-	UcUser insertSelective(UcUser record);
+	int insertSelective(UcUser record);
 
 	UcUser selectByPrimaryKey(Long id);
 
@@ -24,7 +24,7 @@ public interface UcUserService {
 
     int updateByPrimaryKey(UcUser record);
 
-    UcUser findUserByEmail(String email);
+    UcUser findUser(String username,String systemcode);
 
 	Map<String, Object> deleteUserById(String ids);
 

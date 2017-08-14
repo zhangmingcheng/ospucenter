@@ -1,6 +1,7 @@
 package com.osp.ucenter;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
@@ -8,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author fly
  *
  */
-//@EnableAutoConfiguration
+@EnableAutoConfiguration
 @SpringBootApplication
 public class UcenterMain {
 

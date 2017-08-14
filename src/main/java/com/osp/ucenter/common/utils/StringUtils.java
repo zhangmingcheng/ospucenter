@@ -1,4 +1,4 @@
-package com.osp.ucenter.common.tools;
+package com.osp.ucenter.common.utils;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;

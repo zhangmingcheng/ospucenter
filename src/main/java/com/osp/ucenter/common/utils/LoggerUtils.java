@@ -1,4 +1,4 @@
-package com.osp.ucenter.common.tools;
+package com.osp.ucenter.common.utils;
 
 import org.apache.log4j.Logger;
 

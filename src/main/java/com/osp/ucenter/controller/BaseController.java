@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.osp.ucenter.common.tools.StringUtils;
+import com.osp.ucenter.common.utils.StringUtils;
 
 
 /**

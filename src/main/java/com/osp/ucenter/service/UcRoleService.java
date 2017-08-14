@@ -8,7 +8,7 @@ import java.util.Set;
 import com.osp.ucenter.persistence.model.UcRole;
 
 public interface UcRoleService {
-	int deleteByPrimaryKey(Long id);
+	int deleteByPrimaryKey(Integer id);
 
 	int insert(UcRole ucRole);
 

@@ -30,15 +30,14 @@ public class UcUserServiceImpl  implements UcUserService{
 	}
 
 	@Override
-	public UcUser insert(UcUser record) {
-		// TODO Auto-generated method stub
-		return null;
+	public int insert(UcUser record) {
+		return ucUserMapper.insert(record);
 	}
 
 	@Override
-	public UcUser insertSelective(UcUser record) {
+	public int insertSelective(UcUser record) {
 		// TODO Auto-generated method stub
-		return null;
+		return 0;
 	}
 
 	@Override
@@ -60,9 +59,8 @@ public class UcUserServiceImpl  implements UcUserService{
 	}
 
 	@Override
-	public UcUser findUserByEmail(String email) {
-		// TODO Auto-generated method stub
-		return null;
+	public UcUser findUser(String username,String systemcode) {
+		return ucUserMapper.findUser(username,systemcode);
 	}
 
 	@Override

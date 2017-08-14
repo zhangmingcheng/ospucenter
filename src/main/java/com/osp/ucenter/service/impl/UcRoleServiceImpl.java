@@ -1,13 +1,17 @@
 package com.osp.ucenter.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.osp.ucenter.common.utils.LoggerUtils;
 import com.osp.ucenter.persistence.dao.UcRoleMapper;
 import com.osp.ucenter.persistence.model.UcRole;
 import com.osp.ucenter.service.UcRoleService;
@@ -23,9 +27,8 @@ public class UcRoleServiceImpl implements UcRoleService {
 	UcRoleMapper ucRoleMapper;
 
 	@Override
-	public int deleteByPrimaryKey(Long id) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int deleteByPrimaryKey(Integer id) {
+		return ucRoleMapper.deleteByPrimaryKey(id);
 	}
 
 	@Override
@@ -57,10 +60,40 @@ public class UcRoleServiceImpl implements UcRoleService {
 		return 0;
 	}
 
+	/**
+	 * 删除角色，前台可以多选，角色id使用“,”分割
+	 */
 	@Override
 	public Map<String, Object> deleteRoleById(String ids) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String,Object> resultMap = new HashMap<String,Object>();
+		try {
+			int count=0;
+			String resultMsg = "删除成功。";
+			String[] idArray = new String[]{};
+			if(StringUtils.contains(ids, ",")){
+				idArray = ids.split(",");
+			}else{
+				idArray = new String[]{ids};
+			}
+			
+			c:for (String idx : idArray) {
+				Integer id = new Integer(idx);
+				if(new Integer(1).equals(id)){
+					resultMsg = "操作成功，但是'系统管理员不能删除。";
+					continue c;
+				}else{
+					count+=this.deleteByPrimaryKey(id);
+				}
+			}
+			resultMap.put("status", 200);
+			resultMap.put("count", count);
+			resultMap.put("resultMsg", resultMsg);
+		} catch (Exception e) {
+			LoggerUtils.fmtError(getClass(), e, "根据IDS删除用户出现错误，ids[%s]", ids);
+			resultMap.put("status", 500);
+			resultMap.put("message", "删除出现错误，请刷新后再试！");
+		}
+		return resultMap; 
 	}
 
 	@Override
@@ -71,8 +104,10 @@ public class UcRoleServiceImpl implements UcRoleService {
 
 	@Override
 	public List<UcRole> findNowAllPermission() {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("userId", SecurityUtils.getSubject().getPrincipal());
+		return new ArrayList<UcRole>();
+		//return roleMapper.findNowAllPermission(map);
 	}
 
 	@Override
