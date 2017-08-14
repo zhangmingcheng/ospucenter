@@ -3,6 +3,7 @@ package com.osp.ucenter.controller;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -89,4 +90,15 @@ public class LoginController extends BaseController{
 		resultMap.put("status", 200);
 		return resultMap;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/loginTest.json")
+	public String loginTest(HttpServletRequest request, HttpServletResponse response, RedirectAttributes attr) {
+		System.out.println("{a:aa}");
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		
+		return "{\"status\":1,\"data\":{\"user\":\"aaaa\",\"token\":\"sssssss\"}}";
+	}
+
+	
 }
