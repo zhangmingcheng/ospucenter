@@ -56,7 +56,7 @@ public class LoginController extends BaseController{
 			// password);
 
 			Subject currentUser = SecurityUtils.getSubject();
-			UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+			UsernamePasswordToken token = new UsernamePasswordToken(username, UserManager.md5Pswd(username, password));
 			currentUser.login(token);
 //			currentUser.hasRole("*");
 			
