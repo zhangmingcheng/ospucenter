@@ -137,7 +137,6 @@ public class RequestUtil {
         try {
             string = request.getParameter(key);
         } catch (Exception e) {
-
             MyRuntimeException myRuntimeException = new MyRuntimeException("获得参数异常");
             myRuntimeException.setLogmsg("获得参数异常" + key);
             throw myRuntimeException;

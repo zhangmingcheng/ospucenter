@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.osp.ucenter.common.exception.MyRuntimeException;
+import com.osp.ucenter.common.http.RequestUtil;
 import com.osp.ucenter.common.utils.LoggerUtils;
+import com.osp.ucenter.jwt.JwtHelper;
 import com.osp.ucenter.manager.UserManager;
 import com.osp.ucenter.persistence.model.UcUser;
 import com.osp.ucenter.service.UcUserService;
@@ -30,15 +33,16 @@ import com.osp.ucenter.service.UcUserService;
 @Scope(value = "prototype")
 @RequestMapping(value = "/user")
 public class LoginController extends BaseController{
+	
 	@Autowired
 	UcUserService UcUserService;
-
+	
 	@ResponseBody
 	@RequestMapping(value = "/login")
 	public String login(HttpServletRequest request, RedirectAttributes attr) {
 		try {
-			// String username = RequestUtil.getString(request, "username");
-			// String password = RequestUtil.getString(request, "password");
+			 String username = RequestUtil.getString(request, "username");
+			 String password = RequestUtil.getString(request, "password");
 			// String code = RequestUtil.getString(request, "verifyCode");
 			// String vrifyCode = (String) session.getAttribute("vrifyCode");
 			// if (code == null || !code.equals(vrifyCode)) {
@@ -50,9 +54,20 @@ public class LoginController extends BaseController{
 			// password);
 
 			Subject currentUser = SecurityUtils.getSubject();
-			UsernamePasswordToken token = new UsernamePasswordToken("zmcheng", "123456");
+			UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 			currentUser.login(token);
+//			currentUser.hasRole("*");
+			
+			 //拼装accessToken  MDk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY= 
+            String accessToken = JwtHelper.createJWT(username, 1800 * 1000);
+            
+            //获取 菜单
+            
+            
+            System.out.println(accessToken);
 			return "登录成功!";
+		} catch(MyRuntimeException e) {
+			return "";
 		} catch (AuthenticationException e) {
 			attr.addAttribute("errormsg", "用户或密码错误！！！");
 			e.printStackTrace();
@@ -95,10 +110,13 @@ public class LoginController extends BaseController{
 	@RequestMapping(value = "/loginTest.json")
 	public String loginTest(HttpServletRequest request, HttpServletResponse response, RedirectAttributes attr) {
 		System.out.println("{a:aa}");
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		
+//		response.setHeader("Access-Control-Allow-Origin", "*");
+		Subject currentUser = SecurityUtils.getSubject();
+		currentUser.getSession().getAttribute("");
 		return "{\"status\":1,\"data\":{\"user\":\"aaaa\",\"token\":\"sssssss\"}}";
 	}
+	
+	
 
 	
 }

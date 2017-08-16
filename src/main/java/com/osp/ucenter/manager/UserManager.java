@@ -18,7 +18,7 @@ public class UserManager {
 
 	/**
 	 * MD5加密
-	 * 
+	 * 32 位
 	 * @param email
 	 * @param pswd
 	 * @return
