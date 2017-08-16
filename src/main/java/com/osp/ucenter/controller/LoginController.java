@@ -18,6 +18,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.osp.ucenter.common.exception.MyRuntimeException;
 import com.osp.ucenter.common.http.RequestUtil;
+import com.osp.ucenter.common.model.ResponseObject;
+import com.osp.ucenter.common.utils.JsonUtil;
 import com.osp.ucenter.common.utils.LoggerUtils;
 import com.osp.ucenter.jwt.JwtHelper;
 import com.osp.ucenter.manager.UserManager;
@@ -110,10 +112,21 @@ public class LoginController extends BaseController{
 	@RequestMapping(value = "/loginTest.json")
 	public String loginTest(HttpServletRequest request, HttpServletResponse response, RedirectAttributes attr) {
 		System.out.println("{a:aa}");
+		 String username = RequestUtil.getString(request, "username");
+
 //		response.setHeader("Access-Control-Allow-Origin", "*");
 		Subject currentUser = SecurityUtils.getSubject();
 		currentUser.getSession().getAttribute("");
-		return "{\"status\":1,\"data\":{\"user\":\"aaaa\",\"token\":\"sssssss\"}}";
+		ResponseObject ro = ResponseObject.getInstance();
+		ro.setOspState(200);
+        String accessToken = JwtHelper.createJWT(username, 1800 * 1000);
+		ro.setToken(accessToken);
+		ro.setValue("danwei", "IT");
+		
+		
+		String json = JsonUtil.beanToJson(ro);
+		return json;
+//		return "{\"status\":1,\"data\":{\"user\":\"aaaa\",\"token\":\"sssssss\"}}";
 	}
 	
 	
