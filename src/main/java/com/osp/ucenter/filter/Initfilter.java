@@ -26,8 +26,15 @@ public class Initfilter implements Filter {
 		chain.doFilter(request, response);
 	}
 
+	/**
+	 * 初始化 系统环境变量
+	 * URI
+	 * 配置参数
+	 * EAI
+	 */
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
+		arg0.getServletContext();
 		logger.info("=============ospUcenter init=============");
 	}
 

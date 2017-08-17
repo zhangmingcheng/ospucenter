@@ -36,19 +36,19 @@ import com.osp.ucenter.service.UcUserService;
 @Controller
 @Scope(value = "prototype")
 @RequestMapping(value = "/user")
-public class LoginController extends BaseController{
-	
+public class LoginController extends BaseController {
+
 	@Autowired
 	UcUserService ucUserService;
-	
+
 	@ResponseBody
-	@RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST} )
+	@RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.POST })
 	public String login(HttpServletRequest request, @RequestBody UcUser user) {
-        ResponseObject ro = ResponseObject.getInstance();
+		ResponseObject ro = ResponseObject.getInstance();
 		try {
 			System.out.println("loginloginloginloginloginloginlogin");
-			 String username = user.getUserName();
-			 String password = user.getUserPwd();
+			String username = user.getUserName();
+			String password = user.getUserPwd();
 			// String code = RequestUtil.getString(request, "verifyCode");
 			// String vrifyCode = (String) session.getAttribute("vrifyCode");
 			// if (code == null || !code.equals(vrifyCode)) {
@@ -62,20 +62,20 @@ public class LoginController extends BaseController{
 			Subject currentUser = SecurityUtils.getSubject();
 			UsernamePasswordToken token = new UsernamePasswordToken(username, UserManager.md5Pswd(username, password));
 			currentUser.login(token);
-//			currentUser.hasRole("*");
-			
-			//获取 菜单
-			
-			 //拼装accessToken  MDk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY= 
-            String accessToken = JwtHelper.createJWT(username, 1800 * 1000);
-            System.out.println(accessToken);
-            //放回RO
-    		ro.setOspState(200);
-    		ro.setToken(accessToken);
-    		ro.setValue("danwei", "IT");
-    		String json = JsonUtil.beanToJson(ro);
+			// currentUser.hasRole("*");
+
+			// 获取 菜单
+
+			// 拼装accessToken MDk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY=
+			String accessToken = JwtHelper.createJWT(username, 1800 * 1000);
+			System.out.println(accessToken);
+			// 放回RO
+			ro.setOspState(200);
+			ro.setToken(accessToken);
+			ro.setValue("danwei", "IT");
+			String json = JsonUtil.beanToJson(ro);
 			return json;
-		} catch(MyRuntimeException e) {
+		} catch (MyRuntimeException e) {
 			ro.setOspState(400);
 			return JsonUtil.beanToJson(ro);
 		} catch (AuthenticationException e) {
@@ -98,14 +98,14 @@ public class LoginController extends BaseController{
 		ucUser.setUserPwd("123456");
 		ucUser.setUserEmail("124973@qq.com");
 		ucUser = UserManager.md5Pswd(ucUser);
-			
-		UcUser user = ucUserService.findUser(ucUser.getUserName(),ucUser.getSystemcode());
-		if(null != user){
+
+		UcUser user = ucUserService.findUser(ucUser.getUserName(), ucUser.getSystemcode());
+		if (null != user) {
 			resultMap.put("message", "帐号已经存在！");
 			return resultMap;
 		}
 		int count = ucUserService.insert(ucUser);
-		LoggerUtils.fmtDebug(getClass(), "注册插入完毕！",ucUser.toString());
+		LoggerUtils.fmtDebug(getClass(), "注册插入完毕！", ucUser.toString());
 		Subject currentUser = SecurityUtils.getSubject();
 		UsernamePasswordToken token = new UsernamePasswordToken(ucUser.getUserName(), ucUser.getUserPwd());
 		currentUser.login(token);
@@ -115,28 +115,28 @@ public class LoginController extends BaseController{
 		resultMap.put("status", 200);
 		return resultMap;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/loginTest.json")
 	public String loginTest(HttpServletRequest request, HttpServletResponse response, RedirectAttributes attr) {
 		System.out.println("{a:aa}");
-		 String username = RequestUtil.getString(request, "username");
+		String username = RequestUtil.getString(request, "username");
 
-//		response.setHeader("Access-Control-Allow-Origin", "*");
+		// response.setHeader("Access-Control-Allow-Origin", "*");
 		Subject currentUser = SecurityUtils.getSubject();
 		currentUser.getSession().getAttribute("");
 		ResponseObject ro = ResponseObject.getInstance();
 		ro.setOspState(200);
-        String accessToken = JwtHelper.createJWT(username, 1800 * 1000);
+		String accessToken = JwtHelper.createJWT(username, 1800 * 1000);
 		ro.setToken(accessToken);
 		ro.setValue("danwei", "IT");
-		
-		
+
 		String json = JsonUtil.beanToJson(ro);
 		return json;
-//		return "{\"status\":1,\"data\":{\"user\":\"aaaa\",\"token\":\"sssssss\"}}";
+		// return
+		// "{\"status\":1,\"data\":{\"user\":\"aaaa\",\"token\":\"sssssss\"}}";
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/create")
 	public String createUser() {
@@ -150,5 +150,4 @@ public class LoginController extends BaseController{
 		return re + "";
 	}
 
-	
 }

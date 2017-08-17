@@ -34,8 +34,9 @@ public class SecurityFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
+        String uri = request.getRequestURI();
 
-		// 1. 检查用户是否已登录
+		// 1. 检查用户是否已登录 Tocken JWT
 //        User user = (User) request.getSession().getAttribute("user");
 
         // 2. 没登录，登录去
@@ -46,7 +47,6 @@ public class SecurityFilter implements Filter {
 //        }
 
         // 3. 得到用户想访问的资源
-        String uri = request.getRequestURI();
 
         // 4. 得到访问该资源需要的权限
 //        SecurityService service = new SecurityService();

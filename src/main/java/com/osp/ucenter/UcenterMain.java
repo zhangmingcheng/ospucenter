@@ -23,35 +23,44 @@ public class UcenterMain {
 		SpringApplication.run(UcenterMain.class, args);
 	}
 	
+	/**
+	 * 初始化
+	 * @return
+	 */
+	@Bean
+    public FilterRegistrationBean InitfilterRegistration() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(new Initfilter());
+        registration.addUrlPatterns("/no");
+        registration.setName("Initfilter");
+        registration.setOrder(100);
+        return registration;
+    }
+	
+	/**
+	 * 跨域处理Filter
+	 * @return
+	 */
 	@Bean
     public FilterRegistrationBean crossDomainFilterRegistration() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(new CrossDomainFilter());
         registration.addUrlPatterns("/*");
 //        registration.addInitParameter("paramName", "paramValue");
-        registration.setName("Initfilter");
-        registration.setOrder(100);
-        return registration;
-    }
-	
-	
-	@Bean
-    public FilterRegistrationBean testFilterRegistration() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(new Initfilter());
-//        registration.addUrlPatterns("/*");
-//        registration.addInitParameter("paramName", "paramValue");
-        registration.setName("Initfilter");
+        registration.setName("CrossDomainFilter");
         registration.setOrder(101);
         return registration;
     }
 	
+	/**
+	 * 安全权限
+	 * @return
+	 */
 	@Bean
     public FilterRegistrationBean securityFilter() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(new SecurityFilter());
         registration.addUrlPatterns("/*");
-//        registration.addInitParameter("paramName", "paramValue");
         registration.setName("SecurityFilter");
         registration.setOrder(102);
         return registration;
