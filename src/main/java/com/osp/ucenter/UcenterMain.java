@@ -1,4 +1,4 @@
-package com.osp.ucenter;
+	package com.osp.ucenter;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
+import com.osp.ucenter.filter.CrossDomainFilter;
 import com.osp.ucenter.filter.Initfilter;
 import com.osp.ucenter.filter.SecurityFilter;
 
@@ -22,6 +23,16 @@ public class UcenterMain {
 		SpringApplication.run(UcenterMain.class, args);
 	}
 	
+	@Bean
+    public FilterRegistrationBean crossDomainFilterRegistration() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(new CrossDomainFilter());
+        registration.addUrlPatterns("/*");
+//        registration.addInitParameter("paramName", "paramValue");
+        registration.setName("Initfilter");
+        registration.setOrder(100);
+        return registration;
+    }
 	
 	
 	@Bean
@@ -31,7 +42,7 @@ public class UcenterMain {
 //        registration.addUrlPatterns("/*");
 //        registration.addInitParameter("paramName", "paramValue");
         registration.setName("Initfilter");
-        registration.setOrder(10);
+        registration.setOrder(101);
         return registration;
     }
 	
@@ -42,7 +53,7 @@ public class UcenterMain {
         registration.addUrlPatterns("/*");
 //        registration.addInitParameter("paramName", "paramValue");
         registration.setName("SecurityFilter");
-        registration.setOrder(11);
+        registration.setOrder(102);
         return registration;
     }
 

@@ -71,8 +71,8 @@ public class SecurityFilter implements Filter {
 //            return;
 //        }
 
-        // 7. 如果有，则则放行  允许跨域访问
-        response.setHeader("Access-Control-Allow-Origin", "*");
+        // 7. 如果有，则则放行
+       
 		logger.info("=============SecurityFilter dofilter=============");
 
         chain.doFilter(request, response);

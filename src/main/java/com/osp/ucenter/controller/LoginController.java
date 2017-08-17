@@ -12,7 +12,9 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -37,14 +39,16 @@ import com.osp.ucenter.service.UcUserService;
 public class LoginController extends BaseController{
 	
 	@Autowired
-	UcUserService UcUserService;
+	UcUserService ucUserService;
 	
 	@ResponseBody
-	@RequestMapping(value = "/login")
-	public String login(HttpServletRequest request, RedirectAttributes attr) {
+	@RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST} )
+	public String login(HttpServletRequest request, @RequestBody UcUser user) {
+        ResponseObject ro = ResponseObject.getInstance();
 		try {
-			 String username = RequestUtil.getString(request, "username");
-			 String password = RequestUtil.getString(request, "password");
+			System.out.println("loginloginloginloginloginloginlogin");
+			 String username = user.getUserName();
+			 String password = user.getUserPwd();
 			// String code = RequestUtil.getString(request, "verifyCode");
 			// String vrifyCode = (String) session.getAttribute("vrifyCode");
 			// if (code == null || !code.equals(vrifyCode)) {
@@ -60,24 +64,28 @@ public class LoginController extends BaseController{
 			currentUser.login(token);
 //			currentUser.hasRole("*");
 			
+			//获取 菜单
+			
 			 //拼装accessToken  MDk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY= 
             String accessToken = JwtHelper.createJWT(username, 1800 * 1000);
-            
-            //获取 菜单
-            
-            
             System.out.println(accessToken);
-			return "登录成功!";
+            //放回RO
+    		ro.setOspState(200);
+    		ro.setToken(accessToken);
+    		ro.setValue("danwei", "IT");
+    		String json = JsonUtil.beanToJson(ro);
+			return json;
 		} catch(MyRuntimeException e) {
-			return "";
+			ro.setOspState(400);
+			return JsonUtil.beanToJson(ro);
 		} catch (AuthenticationException e) {
-			attr.addAttribute("errormsg", "用户或密码错误！！！");
+			ro.setOspState(401);
 			e.printStackTrace();
-			return "redirect:/login";
+			return JsonUtil.beanToJson(ro);
 		} catch (Exception e) {
-			attr.addAttribute("errormsg", "验证码错误！！！");
+			ro.setOspState(402);
 			e.printStackTrace();
-			return "redirect:/login";
+			return JsonUtil.beanToJson(ro);
 		}
 	}
 
@@ -91,12 +99,12 @@ public class LoginController extends BaseController{
 		ucUser.setUserEmail("124973@qq.com");
 		ucUser = UserManager.md5Pswd(ucUser);
 			
-		UcUser user = UcUserService.findUser(ucUser.getUserName(),ucUser.getSystemcode());
+		UcUser user = ucUserService.findUser(ucUser.getUserName(),ucUser.getSystemcode());
 		if(null != user){
 			resultMap.put("message", "帐号已经存在！");
 			return resultMap;
 		}
-		int count = UcUserService.insert(ucUser);
+		int count = ucUserService.insert(ucUser);
 		LoggerUtils.fmtDebug(getClass(), "注册插入完毕！",ucUser.toString());
 		Subject currentUser = SecurityUtils.getSubject();
 		UsernamePasswordToken token = new UsernamePasswordToken(ucUser.getUserName(), ucUser.getUserPwd());
@@ -129,7 +137,18 @@ public class LoginController extends BaseController{
 //		return "{\"status\":1,\"data\":{\"user\":\"aaaa\",\"token\":\"sssssss\"}}";
 	}
 	
-	
+	@ResponseBody
+	@RequestMapping(value = "/create")
+	public String createUser() {
+		UcUser ucUser = new UcUser();
+		ucUser.setUserName("asdqwe");
+		ucUser.setUserPwd("123456");
+		ucUser.setUserEmail("124973@qq.com");
+		ucUser = UserManager.md5Pswd(ucUser);
+		int re = ucUserService.insert(ucUser);
+		System.out.println("============" + re + "==================");
+		return re + "";
+	}
 
 	
 }
