@@ -1,5 +1,6 @@
 package com.osp.ucenter.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ import com.osp.ucenter.common.model.ResponseObject;
 import com.osp.ucenter.common.utils.JsonUtil;
 import com.osp.ucenter.common.utils.LoggerUtils;
 import com.osp.ucenter.jwt.JwtHelper;
+import com.osp.ucenter.jwt.TokenAuth;
 import com.osp.ucenter.manager.UserManager;
 import com.osp.ucenter.persistence.model.UcUser;
 import com.osp.ucenter.service.UcUserService;
@@ -43,38 +46,27 @@ public class LoginController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.POST })
-	public String login(HttpServletRequest request, @RequestBody UcUser user) {
+	public String login(@RequestBody UcUser user) {
 		ResponseObject ro = ResponseObject.getInstance();
 		try {
-			System.out.println("loginloginloginloginloginloginlogin");
 			String username = user.getUserName();
 			String password = user.getUserPwd();
-			// String code = RequestUtil.getString(request, "verifyCode");
-			// String vrifyCode = (String) session.getAttribute("vrifyCode");
-			// if (code == null || !code.equals(vrifyCode)) {
-			// if (!"a".equals(code)) {// 开发临时用
-			// throw new MyRuntimeException("验证码错误");
-			// }
-			// }
-			// LoginAuth.login("classpath:shiro-multi-realm.ini", username,
-			// password);
-
 			Subject currentUser = SecurityUtils.getSubject();
 			UsernamePasswordToken token = new UsernamePasswordToken(username, UserManager.md5Pswd(username, password));
 			currentUser.login(token);
-			// currentUser.hasRole("*");
+			//currentUser.hasRole("admin");
 
 			// 获取 菜单
 
 			// 拼装accessToken MDk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY=
 			String accessToken = JwtHelper.createJWT(username, 1800 * 1000);
-			System.out.println(accessToken);
-			// 放回RO
+			TokenAuth.add(accessToken);
 			ro.setOspState(200);
-			ro.setToken(accessToken);
-			ro.setValue("danwei", "IT");
-			String json = JsonUtil.beanToJson(ro);
-			return json;
+			ro.setToken(accessToken);	
+			Map<String , Object> data = new HashMap<String,Object>();
+		    data.put(username, TokenAuth.getUser(username));
+			ro.setData(data);
+			return JsonUtil.beanToJson(ro);
 		} catch (MyRuntimeException e) {
 			ro.setOspState(400);
 			return JsonUtil.beanToJson(ro);
@@ -138,16 +130,57 @@ public class LoginController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/create")
-	public String createUser() {
-		UcUser ucUser = new UcUser();
-		ucUser.setUserName("asdqwe");
-		ucUser.setUserPwd("123456");
-		ucUser.setUserEmail("124973@qq.com");
-		ucUser = UserManager.md5Pswd(ucUser);
-		int re = ucUserService.insert(ucUser);
-		System.out.println("============" + re + "==================");
-		return re + "";
+	@RequestMapping(value = "/userInfo")
+	public String userInfo(@RequestBody UcUser user) {
+		ResponseObject ro = ResponseObject.getInstance();
+		try {
+			String username = user.getUserName();
+			String systemcode = user.getSystemcode();
+			return JsonUtil.beanToJson(ucUserService.findUser(username, systemcode));
+		} catch (MyRuntimeException e) {
+			ro.setOspState(400);
+			return JsonUtil.beanToJson(ro);
+		} catch (Exception e) {
+			ro.setOspState(402);
+			e.printStackTrace();
+			return JsonUtil.beanToJson(ro);
+		}
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "/updateUserInfo")
+	public String updateUserInfo(@RequestBody UcUser user) {
+		ResponseObject ro = ResponseObject.getInstance();
+		try {
+			ucUserService.updateByPrimaryKeySelective(user);
+			ro.setOspState(200);
+			return JsonUtil.beanToJson(ro);
+		} catch (MyRuntimeException e) {
+			ro.setOspState(400);
+			return JsonUtil.beanToJson(ro);
+		} catch (Exception e) {
+			ro.setOspState(402);
+			e.printStackTrace();
+			return JsonUtil.beanToJson(ro);
+		}
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/updateUserPsw")
+	public String updateUserPsw(@RequestBody UcUser user) {
+		ResponseObject ro = ResponseObject.getInstance();
+		try {
+			user = UserManager.md5Pswd(user);
+			ucUserService.updateByPrimaryKeySelective(user);
+			ro.setOspState(200);
+			return JsonUtil.beanToJson(ro);
+		} catch (MyRuntimeException e) {
+			ro.setOspState(400);
+			return JsonUtil.beanToJson(ro);
+		} catch (Exception e) {
+			ro.setOspState(402);
+			e.printStackTrace();
+			return JsonUtil.beanToJson(ro);
+		}
+	}
 }

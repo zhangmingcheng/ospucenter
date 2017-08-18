@@ -148,3 +148,21 @@ CREATE TABLE `uc_user_role` (
 -- ----------------------------
 -- Records of uc_user_role
 -- ----------------------------
+
+
+
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for uc_rolepermission
+-- ----------------------------
+DROP TABLE IF EXISTS `uc_rolepermission`;
+CREATE TABLE `uc_rolepermission` (
+  `roleid` int(11) NOT NULL,
+  `permission` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of uc_rolepermission
+-- ----------------------------
+

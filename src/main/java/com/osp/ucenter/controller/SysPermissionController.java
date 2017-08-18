@@ -1,18 +1,24 @@
 package com.osp.ucenter.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.osp.ucenter.service.UcPermissionService;
+
 /**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author zivy
- * @since 2017-08-02
+ * 权限控制类
+ * @author zhangmingcheng
  */
 @Controller
-@RequestMapping("/sysPermission")
+@Scope(value="prototype")
+@RequestMapping("permission")
+// extends BaseController
 public class SysPermissionController {
 	
+	@Autowired
+	UcPermissionService ucPermissionService;
+	
 }
+

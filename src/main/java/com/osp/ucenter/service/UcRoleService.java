@@ -5,12 +5,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.osp.ucenter.mybatis.page.Pagination;
 import com.osp.ucenter.persistence.model.UcRole;
 
 public interface UcRoleService {
 	int deleteByPrimaryKey(Integer id);
 
 	int insert(UcRole ucRole);
+	
+	int findCount();
 
 	// 插入一条数据,只插入不为null的字段,不会影响有默认值的字段,优先使用传入的参数值,参数值空时,才会使用序列、UUID,自动增长
 	int insertSelective(UcRole ucRole);
@@ -23,8 +26,7 @@ public interface UcRoleService {
 
 	int updateByPrimaryKey(UcRole ucRole);
 
-	// Pagination<UcRole> findPage(Map<String, Object> resultMap, Integer
-	// pageNo, Integer pageSize);
+	Pagination<UcRole> findPage(Map<String, Object> resultMap, Integer pageNo, Integer pageSize);
 
 	Map<String, Object> deleteRoleById(String ids);
 

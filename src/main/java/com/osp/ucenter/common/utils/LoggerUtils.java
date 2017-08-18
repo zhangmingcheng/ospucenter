@@ -25,6 +25,7 @@ public class LoggerUtils {
 			return;
 		Logger logger = Logger.getLogger(clazz);
 		logger.debug(message);
+		logger.info(message);
 	}
 
 	/**
@@ -66,6 +67,7 @@ public class LoggerUtils {
 			return;
 		}
 		logger.error(message, e);
+		logger.info(message);
 	}
 
 	/**

@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.osp.ucenter.mybatis.BaseMybatisDao;
 import com.osp.ucenter.persistence.dao.UcUserMapper;
 import com.osp.ucenter.persistence.model.UcUser;
 import com.osp.ucenter.service.UcUserService;
@@ -13,7 +14,7 @@ import com.osp.ucenter.service.UcUserService;
  * @author zhangmingcheng
  */
 @Service
-public class UcUserServiceImpl  implements UcUserService{
+public class UcUserServiceImpl extends BaseMybatisDao<UcUserMapper> implements UcUserService{
 	
 	@Autowired
     private UcUserMapper ucUserMapper;
@@ -48,8 +49,7 @@ public class UcUserServiceImpl  implements UcUserService{
 
 	@Override
 	public int updateByPrimaryKeySelective(UcUser ucUser) {
-		ucUserMapper.updateByPrimaryKeySelective(ucUser);
-		return 0;
+		return ucUserMapper.updateByPrimaryKeySelective(ucUser);
 	}
 
 	@Override

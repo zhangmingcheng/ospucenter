@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.osp.ucenter.common.utils.LoggerUtils;
+import com.osp.ucenter.mybatis.BaseMybatisDao;
+import com.osp.ucenter.mybatis.page.Pagination;
 import com.osp.ucenter.persistence.dao.UcRoleMapper;
 import com.osp.ucenter.persistence.model.UcRole;
 import com.osp.ucenter.service.UcRoleService;
@@ -21,10 +23,29 @@ import com.osp.ucenter.service.UcRoleService;
  * @author zhangmingcheng
  */
 @Service
-public class UcRoleServiceImpl implements UcRoleService {
+@SuppressWarnings("unchecked")
+public class UcRoleServiceImpl extends BaseMybatisDao<UcRoleMapper>  implements UcRoleService {
 
 	@Autowired
 	UcRoleMapper ucRoleMapper;
+	
+	@Autowired
+	public int findCount(){
+		return ucRoleMapper.findCount();
+	}
+	
+	@Override
+	public Pagination<UcRole> findPage(Map<String, Object> resultMap,
+			Integer pageNo, Integer pageSize) {
+		return super.findPage(resultMap, pageNo, pageSize);
+	}
+	
+	/*@Override
+	public Pagination<RolePermissionAllocationBo> findRoleAndPermissionPage(
+			Map<String, Object> resultMap, Integer pageNo, Integer pageSize) {
+		return super.findPage("findRoleAndPermission", "findCount", resultMap, pageNo, pageSize);
+	}*/
+
 
 	@Override
 	public int deleteByPrimaryKey(Integer id) {
@@ -120,5 +141,4 @@ public class UcRoleServiceImpl implements UcRoleService {
 	public ArrayList<UcRole> selectAllRoles() {
 		return ucRoleMapper.selectAllRoles();		
 	}
-
 }
