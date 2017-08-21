@@ -183,4 +183,12 @@ public class LoginController extends BaseController {
 			return JsonUtil.beanToJson(ro);
 		}
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/auth", method =RequestMethod.GET)
+	public String noauth() {
+		ResponseObject ro = ResponseObject.getInstance();
+		ro.setOspState(402);
+		return JsonUtil.beanToJson(ro);
+	}
 }
