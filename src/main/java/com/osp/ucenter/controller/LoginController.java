@@ -86,7 +86,7 @@ public class LoginController extends BaseController {
 	public Map<String, Object> register(HttpServletRequest request, RedirectAttributes attr) {
 		resultMap.put("status", 400);
 		UcUser ucUser = new UcUser();
-		ucUser.setUserName("test1");
+		ucUser.setUserName("test111");
 		ucUser.setUserPwd("123456");
 		ucUser.setUserEmail("124973@qq.com");
 		ucUser = UserManager.md5Pswd(ucUser);

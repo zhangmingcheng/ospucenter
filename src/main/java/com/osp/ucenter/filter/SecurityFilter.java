@@ -67,7 +67,7 @@ public class SecurityFilter implements Filter {
 			return ;
 		}
 		// 1. 检查用户是否已登录 Tocken JWT
-		String osptoken = request.getHeader("osptoken");
+		String osptoken = request.getHeader("token");
 		System.out.println("url====="+uri+"   token====="+osptoken);
 
 		// 2. 没登录，登录去
