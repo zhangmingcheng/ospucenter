@@ -33,8 +33,8 @@ public class TokenAuth {
 	 * @param username
 	 */
 	public static void removeAuthUser(String username) {
-		if (users.containsKey(username) == true) {
-			users.remove(username);
+		if (authUsers.containsKey(username) == true) {
+			authUsers.remove(username);
 		}
 	}
 	
@@ -44,10 +44,10 @@ public class TokenAuth {
 	 * @return
 	 */
 	public static UcUser getAuthUser(String username) {
-		if (users.containsKey(username) == false) {
+		if (authUsers.containsKey(username) == false) {
 			return null;
 		}
-		return users.get(username);
+		return authUsers.get(username);
 	}
 	
 	

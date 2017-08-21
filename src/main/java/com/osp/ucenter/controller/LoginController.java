@@ -65,8 +65,8 @@ public class LoginController extends BaseController {
 				ro.setToken(accessToken);
 				Map<String, Object> data = new HashMap<String, Object>();
 				data.put("ucUser", ucUser);
-				TokenAuth.removeAuthUser(username);
 				ro.setData(data);
+				TokenAuth.removeAuthUser(username);
 			}else{
 				ro.setOspState(500);
 			}
