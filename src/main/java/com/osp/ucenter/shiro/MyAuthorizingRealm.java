@@ -35,7 +35,7 @@ public class MyAuthorizingRealm extends AuthorizingRealm {
 	 */
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
 			throws AuthenticationException {
-		// 将token转换成UsernamePasswordToken
+		// 将token转换成UsernamePasswordToken  登录时暂时还没有使用系统编号这个字段
 		UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) authenticationToken;
 		String username = (String) usernamePasswordToken.getPrincipal();
 		String password = new String((char[]) usernamePasswordToken.getCredentials());
@@ -51,14 +51,14 @@ public class MyAuthorizingRealm extends AuthorizingRealm {
 				e.printStackTrace();
 			}
 		}
-		TokenAuth.addUser(username, user);
+		TokenAuth.addUser(user.getUserId(), user);
+		TokenAuth.addAuthUser(username, user);
 		return new SimpleAuthenticationInfo(username, user.getUserPwd(), getName());
 
 	}
 
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0) {
-		System.out.println("==========================数据数据数据数据数据数据");
 		return null;
 	}
 }

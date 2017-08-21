@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.ParameterMapping;
 import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,20 @@ public class BaseMybatisDao<T> extends SqlSessionDaoSupport {
 			LoggerUtils.error(SELF, "初始化失败，继承BaseMybatisDao，没有泛型！");
 		}
 	}
+	
+	/**
+	 * 重载减少参数DEFAULT_SQL_ID="findAll"  DEFAULT_COUNT_SQL_ID="findCount"
+	 * 
+	 * @param params
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	public Pagination findPage(Map<String, Object> params, Integer pageNo, Integer pageSize) {
+		return findPage(DEFAULT_SQL_ID, DEFAULT_COUNT_SQL_ID, params, pageNo, pageSize);
+	}
+
 
 	/**
 	 * 分页
@@ -80,8 +95,6 @@ public class BaseMybatisDao<T> extends SqlSessionDaoSupport {
 	 *            返回的类型[可以不传参]
 	 * @return
 	 */
-	// DEFAULT_SQL_ID = "findAll";
-	// DEFAULT_COUNT_SQL_ID = "findCount";
 	public Pagination findPage(String sqlId, String countId, Map<String, Object> params, Integer pageNo,
 			Integer pageSize) {
 		pageNo = null == pageNo ? 1 : pageNo;
@@ -89,19 +102,18 @@ public class BaseMybatisDao<T> extends SqlSessionDaoSupport {
 		Pagination page = new Pagination();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
-		Configuration c = this.getSqlSession().getConfiguration();
 		int offset = (page.getPageNo() - 1) * page.getPageSize();
 		String page_sql = String.format(" limit  %s , %s ", offset, pageSize);
 		params.put("page_sql", page_sql);
 		// 如com.sojson.common.dao.UUserMapper.findAll
 		sqlId = String.format("%s.%s", NAMESPACE, sqlId);
-		BoundSql boundSql = c.getMappedStatement(sqlId).getBoundSql(params);
-		// sqlcode:select id, name, type from u_role limit 0 , 10
-		String sqlcode = boundSql.getSql();
-		LoggerUtils.fmtDebug(SELF, "findPage sql : %s", sqlcode);
+		countId = String.format("%s.%s", NAMESPACE, countId);
 		try {
-			List resultList = this.getSqlSession().selectList(sqlId, params);
+			SqlSession sqlSession = this.getSqlSession();
+			List resultList = sqlSession.selectList(sqlId, params);
+			int totalCount = sqlSession.selectOne(countId);
 			page.setList(resultList);
+			page.setTotalCount(totalCount);
 		} catch (Exception e) {
 			LoggerUtils.error(SELF, "jdbc.error.code.findByPageBySqlId", e);
 		}
@@ -235,19 +247,6 @@ public class BaseMybatisDao<T> extends SqlSessionDaoSupport {
 	 */
 	public List findList(Map<String, Object> params, Integer pageNo, Integer pageSize) {
 		return findList(DEFAULT_SQL_ID, params, pageNo, pageSize);
-	}
-
-	/**
-	 * 重载减少参数DEFAULT_SQL_ID, "findCount"
-	 * 
-	 * @param params
-	 * @param pageNo
-	 * @param pageSize
-	 * @return
-	 */
-	public Pagination findPage(Map<String, Object> params, Integer pageNo, Integer pageSize) {
-
-		return findPage(DEFAULT_SQL_ID, DEFAULT_COUNT_SQL_ID, params, pageNo, pageSize);
 	}
 
 	/**

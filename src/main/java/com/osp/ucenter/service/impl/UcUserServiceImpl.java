@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.osp.ucenter.mybatis.BaseMybatisDao;
 import com.osp.ucenter.persistence.dao.UcUserMapper;
@@ -14,6 +15,7 @@ import com.osp.ucenter.service.UcUserService;
  * @author zhangmingcheng
  */
 @Service
+@Transactional
 public class UcUserServiceImpl extends BaseMybatisDao<UcUserMapper> implements UcUserService{
 	
 	@Autowired
@@ -59,8 +61,8 @@ public class UcUserServiceImpl extends BaseMybatisDao<UcUserMapper> implements U
 	}
 
 	@Override
-	public UcUser findUser(String username,String systemcode) {
-		return ucUserMapper.findUser(username,systemcode);
+	public UcUser findUser(int userId) {
+		return ucUserMapper.findUser(userId);
 	}
 
 	@Override

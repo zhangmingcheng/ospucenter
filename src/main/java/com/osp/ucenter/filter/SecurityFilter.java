@@ -40,6 +40,7 @@ public class SecurityFilter implements Filter {
 		restApp.put("/user/register", 1);
 		restApp.put("/app-name", 1);
 		restApp.put("/user/auth", 1);
+		restApp.put("/role/index", 1);
 	}
 	
 	public Integer getRestApiValue(String rest) {
@@ -58,10 +59,6 @@ public class SecurityFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
 		String uri = request.getRequestURI();
-//		if(uri.equals("/user/login")||uri.equals("/user/register")){
-//			chain.doFilter(request, response);
-//			return ;
-//		}
 
 		/**
 		 * 不需要验证的
@@ -76,7 +73,6 @@ public class SecurityFilter implements Filter {
 
 		// 2. 没登录，登录去
 		if(TokenAuth.hasToken(osptoken)==false) {
-			request.setAttribute("message", "请先登录！！！");
 			request.getRequestDispatcher("/user/auth").forward(request, response);
 			response.setStatus(402);
 			System.out.println("没有权限======================");

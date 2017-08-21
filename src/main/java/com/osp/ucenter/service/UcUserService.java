@@ -24,7 +24,7 @@ public interface UcUserService {
 
     int updateByPrimaryKey(UcUser record);
 
-    UcUser findUser(String username,String systemcode);
+    UcUser findUser(int userId);
 
 	Map<String, Object> deleteUserById(String ids);
 

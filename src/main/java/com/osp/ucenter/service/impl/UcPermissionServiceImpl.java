@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.osp.ucenter.mybatis.BaseMybatisDao;
 import com.osp.ucenter.persistence.dao.UcPermissionMapper;
@@ -16,6 +17,7 @@ import com.osp.ucenter.service.UcPermissionService;
  * @author zhangmingcheng
  */
 @Service
+@Transactional
 public class UcPermissionServiceImpl extends BaseMybatisDao<UcPermissionMapper> implements UcPermissionService{
  
 	@Autowired

@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.osp.ucenter.common.utils.LoggerUtils;
 import com.osp.ucenter.mybatis.BaseMybatisDao;
@@ -23,6 +24,7 @@ import com.osp.ucenter.service.UcRoleService;
  * @author zhangmingcheng
  */
 @Service
+@Transactional
 @SuppressWarnings("unchecked")
 public class UcRoleServiceImpl extends BaseMybatisDao<UcRoleMapper>  implements UcRoleService {
 

@@ -22,7 +22,7 @@ public class DruidDatasource {
 	private Boolean poolPreparedStatements;
 
 	private int maxPoolPreparedStatementPerConnectionSize;
-	
+
 	private int maxWait;
 	private int timeBetweenEvictionRunsMillis;
 	private int minEvictableIdleTimeMillis;

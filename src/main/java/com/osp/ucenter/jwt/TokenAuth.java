@@ -3,8 +3,6 @@ package com.osp.ucenter.jwt;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.shiro.authc.UsernamePasswordToken;
-
 import com.osp.ucenter.persistence.model.UcUser;
 
 /**
@@ -14,35 +12,80 @@ import com.osp.ucenter.persistence.model.UcUser;
  */
 public class TokenAuth {
 	// JWTToken
-	public static Map<String, String> jwtTokens = new HashMap<String, String>();
-	// User 仅供登录认证时使用
-	public static Map<String, UcUser> users = new HashMap<String, UcUser>();
-
-	public static void addUser(String username, UcUser ucUser) {
-		if (users.containsKey(username) == false) {
-			users.put(username, ucUser);
+	public static Map<String, UcUser> jwtTokens = new HashMap<String, UcUser>();
+	//全局map
+	public static Map<Integer, UcUser> users = new HashMap<Integer, UcUser>();
+	//只是登录验证时使用
+	public static Map<String, UcUser> authUsers = new HashMap<String, UcUser>();
+    /**
+     * 登录验证时暂存用户信息
+     * @param username
+     * @param ucUser
+     */
+	public static void addAuthUser(String username,UcUser ucUser){
+		if (authUsers.containsKey(username) == false) {
+			authUsers.put(username, ucUser);
 		}
 	}
-
-	public static void removeUser(String username) {
+	
+	/**
+	 * 登录成功后即从map中移除
+	 * @param username
+	 */
+	public static void removeAuthUser(String username) {
 		if (users.containsKey(username) == true) {
 			users.remove(username);
 		}
 	}
-
-	public static UcUser getUser(String username) {
+	
+	/**
+	 * 获取验证时暂存的用户信息
+	 * @param userId
+	 * @return
+	 */
+	public static UcUser getAuthUser(String username) {
 		if (users.containsKey(username) == false) {
-			return new UcUser();
+			return null;
 		}
 		return users.get(username);
 	}
+	
+	
+	public static void addUser(Integer userId, UcUser ucUser) {
+		if (users.containsKey(userId) == false) {
+			users.put(userId, ucUser);
+		}
+	}
+	
+	public static void updateUser(Integer userId, UcUser ucUser) {
+		if (users.containsKey(userId) == true) {
+			users.put(userId, ucUser);
+		}
+	}
 
-	public static void add(String token) {
-		jwtTokens.put(token, "");
+
+	public static void removeUser(Integer userId) {
+		if (users.containsKey(userId) == true) {
+			users.remove(userId);
+		}
+	}
+
+	public static UcUser getUser(Integer userId) {
+		if (users.containsKey(userId) == false) {
+			return null;
+		}
+		return users.get(userId);
+	}
+	
+
+	public static void add(String token, UcUser ucUser) {
+		jwtTokens.put(token, ucUser);
 	}
 
 	public static void remove(String token) {
-		jwtTokens.remove(token);
+		if (jwtTokens.containsKey(token)) {
+			jwtTokens.remove(token);
+		}
 	}
 
 	public static boolean hasToken(String token) {

@@ -1,6 +1,7 @@
 package com.osp.ucenter.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,11 +41,13 @@ public class SysRoleController extends BaseController {
 	 */
 	@RequestMapping(value = "/index")
 	@ResponseBody
-	public Map<String, Object> index(String findContent, ModelMap modelMap) {
+	public Map<String, Object> index(String findContent) {
 		try {
+			Map<String,Object> modelMap = new HashMap<String,Object>();
 			modelMap.put("findContent", findContent);
 			Pagination<UcRole> role = ucRoleService.findPage(modelMap, pageNo, pageSize);
-			role.setTotalCount(ucRoleService.findCount());
+			//role.setTotalCount(ucRoleService.findCount());
+			System.out.println("总共页数======"+role.getTotalPage());
 			for (UcRole ucRole : role.getList()) {
 				System.out.println("角色信息====" + ucRole.getRoleName());
 			}
