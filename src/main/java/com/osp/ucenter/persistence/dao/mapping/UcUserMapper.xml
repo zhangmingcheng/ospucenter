@@ -77,8 +77,8 @@
     <include refid="where_all"/>
     <include refid="limit_sql" />
   </select>
-  <select id="findCount" resultMap="BaseResultMap" >
- 	 select count(id) from  uc_user
+  <select id="findCount"  resultType="java.lang.Integer" >
+ 	 select count(*) from  uc_user
   	<include refid="where_all" />
   </select>
   <insert id="insert" parameterType="com.osp.ucenter.persistence.model.UcUser">

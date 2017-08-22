@@ -60,6 +60,8 @@ public class LoginController extends BaseController {
 				ucUser.setUserPwd("");
 				// 拼装accessToken MDk4ZjZiY2Q0NjIxZDM3M2NhZGU0ZTgzMjYyN2I0ZjY=
 				String accessToken = JwtHelper.createJWT(username, 1800 * 1000);
+				//暂存jwtToken信息，不存签名部分
+				ucUser.setJwtToken(accessToken.substring(0, accessToken.lastIndexOf('.')));
 				TokenAuth.add(accessToken, ucUser);
 				ro.setOspState(200);
 				ro.setToken(accessToken);

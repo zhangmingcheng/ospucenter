@@ -2,6 +2,7 @@ package com.osp.ucenter.service;
 
 import java.util.Map;
 
+import com.osp.ucenter.mybatis.page.Pagination;
 import com.osp.ucenter.persistence.model.UcUser;
 
 /**
@@ -9,6 +10,8 @@ import com.osp.ucenter.persistence.model.UcUser;
  * @author zhangmingcheng
  */
 public interface UcUserService {
+	
+	Pagination<UcUser> findPage(Map<String, Object> resultMap, Integer pageNo, Integer pageSize);
 	
 	UcUser login(String username ,String password);
 	

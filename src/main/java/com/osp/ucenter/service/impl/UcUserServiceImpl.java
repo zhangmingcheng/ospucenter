@@ -7,23 +7,33 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.osp.ucenter.mybatis.BaseMybatisDao;
+import com.osp.ucenter.mybatis.page.Pagination;
 import com.osp.ucenter.persistence.dao.UcUserMapper;
+import com.osp.ucenter.persistence.model.UcRole;
 import com.osp.ucenter.persistence.model.UcUser;
 import com.osp.ucenter.service.UcUserService;
+
 /**
  * 用户业务实现类
+ * 
  * @author zhangmingcheng
  */
 @Service
 @Transactional
-public class UcUserServiceImpl extends BaseMybatisDao<UcUserMapper> implements UcUserService{
-	
+@SuppressWarnings("unchecked")
+public class UcUserServiceImpl extends BaseMybatisDao<UcUserMapper> implements UcUserService {
+
 	@Autowired
-    private UcUserMapper ucUserMapper;
-   
+	private UcUserMapper ucUserMapper;
+
+	@Override
+	public Pagination<UcUser> findPage(Map<String, Object> resultMap,Integer pageNo, Integer pageSize) {
+		return super.findPage(resultMap, pageNo, pageSize);
+	}
+
 	@Override
 	public UcUser login(String username, String password) {
-		return ucUserMapper.login(username,password);
+		return ucUserMapper.login(username, password);
 	}
 
 	@Override
@@ -88,7 +98,7 @@ public class UcUserServiceImpl extends BaseMybatisDao<UcUserMapper> implements U
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	public UcUserMapper getUcUserMapper() {
 		return ucUserMapper;
 	}
@@ -96,6 +106,5 @@ public class UcUserServiceImpl extends BaseMybatisDao<UcUserMapper> implements U
 	public void setUcUserMapper(UcUserMapper ucUserMapper) {
 		this.ucUserMapper = ucUserMapper;
 	}
-
 
 }
