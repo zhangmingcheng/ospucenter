@@ -40,7 +40,12 @@ public class SecurityFilter implements Filter {
 		restApp.put("/user/register", 1);
 		restApp.put("/app-name", 1);
 		restApp.put("/user/auth", 1);
-		restApp.put("/role/index", 1);
+		restApp.put("/role/deleteRole", 1);
+		restApp.put("/role/addRole", 1);
+		restApp.put("/user/userLists", 1);
+		restApp.put("/user/userLists", 1);
+		restApp.put("/user/onlineUsers", 1);
+		restApp.put("/userRole/allocation", 1);
 	}
 	
 	public Integer getRestApiValue(String rest) {
@@ -107,7 +112,7 @@ public class SecurityFilter implements Filter {
 
 		// 7. 如果有，则则放行
 
-        String token = request.getHeader("token");
+        //String token = request.getHeader("token");
 //        User user = (User) request.getSession().getAttribute("user");
 
         // 2. 没登录，登录去

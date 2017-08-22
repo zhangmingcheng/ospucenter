@@ -3,6 +3,7 @@ package com.osp.ucenter.service;
 import java.util.Map;
 
 import com.osp.ucenter.mybatis.page.Pagination;
+import com.osp.ucenter.persistence.bo.UserRoleAllocationBo;
 import com.osp.ucenter.persistence.model.UcUser;
 
 /**
@@ -10,6 +11,9 @@ import com.osp.ucenter.persistence.model.UcUser;
  * @author zhangmingcheng
  */
 public interface UcUserService {
+	
+	Pagination<UserRoleAllocationBo> findUserAndRole(Map modelMap,
+			Integer pageNo, Integer pageSize);
 	
 	Pagination<UcUser> findPage(Map<String, Object> resultMap, Integer pageNo, Integer pageSize);
 	

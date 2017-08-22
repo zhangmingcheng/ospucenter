@@ -45,6 +45,7 @@ public class LoginController extends BaseController {
 	@RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.POST })
 	public String login(@RequestBody UcUser user) {
 		ResponseObject ro = ResponseObject.getInstance();
+		Map<String, Object> data = new HashMap<String, Object>();
 		try {
 			String username = user.getUserName();
 			String password = user.getUserPwd();
@@ -65,7 +66,6 @@ public class LoginController extends BaseController {
 				TokenAuth.add(accessToken, ucUser);
 				ro.setOspState(200);
 				ro.setToken(accessToken);
-				Map<String, Object> data = new HashMap<String, Object>();
 				data.put("ucUser", ucUser);
 				ro.setData(data);
 				TokenAuth.removeAuthUser(username);

@@ -35,26 +35,27 @@ public class SysUserController {
 
 	/**
 	 * 用户列表
+	 * 
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/userLists")
 	public String userLists() {
 		ResponseObject ro = ResponseObject.getInstance();
+		Map<String, Object> data = new HashMap<String, Object>();
 		try {
-			//@RequestBody Pagination<UcUser> ucUser
+			// @RequestBody Pagination<UcUser> ucUser
 			// Pagination<UcUser> ucUsers = ucUserService.findPage(new
 			// HashMap<String, Object>(), ucUser.getPageNo(),
 			// ucUser.getPageSize());
 			Pagination<UcUser> ucUsers = ucUserService.findPage(new HashMap<String, Object>(), 1, 10);
-			for(UcUser tempUcUser : ucUsers.getList()){
+			for (UcUser tempUcUser : ucUsers.getList()) {
 				tempUcUser.setUserPwd("");
 			}
 			System.out.println("总共页数======" + ucUsers.getTotalPage());
 			for (UcUser user : ucUsers.getList()) {
 				System.out.println("用户信息====" + user.getUserName());
 			}
-			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("ucUser", ucUsers.getList());
 			ro.setOspState(200);
 			ro.setData(data);
@@ -68,34 +69,35 @@ public class SysUserController {
 			return JsonUtil.beanToJson(ro);
 		}
 	}
-	
+
 	/**
 	 * 在线用户
+	 * 
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/onlineUsers")
 	public String onlineUsers() {
 		ResponseObject ro = ResponseObject.getInstance();
+		Map<String, Object> data = new HashMap<String, Object>();
 		try {
-			//@RequestBody Pagination<UcUser> ucUser
+			// @RequestBody Pagination<UcUser> ucUser
 			Pagination<UcUser> ucUsers = new Pagination<UcUser>();
 			ucUsers.setTotalCount(TokenAuth.jwtTokens.size());
-			int start = (ucUsers.getPageNo()-1)*ucUsers.getPageSize();
-			int end = start +ucUsers.getPageSize();
-			int i=0;
+			int start = (ucUsers.getPageNo() - 1) * ucUsers.getPageSize();
+			int end = start + ucUsers.getPageSize();
+			int i = 0;
 			List<UcUser> lists = new ArrayList<>();
-		    for (String jwtToken : TokenAuth.jwtTokens.keySet()) {
-		    	if(i>=start&&i<end){
-		    		lists.add(TokenAuth.jwtTokens.get(jwtToken));
-		    	}    	
-		    }
-		    ucUsers.setList(lists);
+			for (String jwtToken : TokenAuth.jwtTokens.keySet()) {
+				if (i >= start && i < end) {
+					lists.add(TokenAuth.jwtTokens.get(jwtToken));
+				}
+			}
+			ucUsers.setList(lists);
 			System.out.println("总共页数======" + ucUsers.getTotalPage());
 			for (UcUser user : ucUsers.getList()) {
 				System.out.println("在线用户信息====" + user.getUserName());
 			}
-			Map<String, Object> data = new HashMap<String, Object>();
 			data.put("ucUser", ucUsers.getList());
 			ro.setOspState(200);
 			ro.setData(data);
@@ -112,6 +114,7 @@ public class SysUserController {
 
 	/**
 	 * 修改用户信息
+	 * 
 	 * @param user
 	 * @return
 	 */
@@ -119,6 +122,7 @@ public class SysUserController {
 	@RequestMapping(value = "/updateUserInfo")
 	public String updateUserInfo(@RequestBody UcUser user) {
 		ResponseObject ro = ResponseObject.getInstance();
+		Map<String, Object> data = new HashMap<String, Object>();
 		try {
 			int status = ucUserService.updateByPrimaryKeySelective(user);
 			if (status > 0) {
@@ -126,7 +130,6 @@ public class SysUserController {
 				TokenAuth.updateUser(user.getUserId(), ucUser);// 用户信息修改，维护全局map
 			}
 			ro.setOspState(200);
-			Map<String, Object> data = new HashMap<String, Object>();
 			UcUser ucUser = TokenAuth.getUser(user.getUserId());
 			data.put("ucUser", ucUser);
 			return JsonUtil.beanToJson(ro);
@@ -142,6 +145,7 @@ public class SysUserController {
 
 	/**
 	 * 修改用户密码
+	 * 
 	 * @param user
 	 * @return
 	 */
@@ -149,6 +153,7 @@ public class SysUserController {
 	@RequestMapping(value = "/updateUserPsw")
 	public String updateUserPsw(@RequestBody UcUser user) {
 		ResponseObject ro = ResponseObject.getInstance();
+		Map<String, Object> data = new HashMap<String, Object>();
 		try {
 			user = UserManager.md5Pswd(user);
 			int status = ucUserService.updateByPrimaryKeySelective(user);
@@ -157,7 +162,6 @@ public class SysUserController {
 				TokenAuth.updateUser(user.getUserId(), ucUser);// 用户信息修改，维护全局map
 			}
 			ro.setOspState(200);
-			Map<String, Object> data = new HashMap<String, Object>();
 			UcUser ucUser = TokenAuth.getUser(user.getUserId());
 			data.put("ucUser", ucUser);
 			return JsonUtil.beanToJson(ro);
@@ -173,6 +177,7 @@ public class SysUserController {
 
 	/**
 	 * 用户信息
+	 * 
 	 * @param user
 	 * @return
 	 */
@@ -180,9 +185,9 @@ public class SysUserController {
 	@RequestMapping(value = "/userInfo")
 	public String userInfo(@RequestBody UcUser user) {
 		ResponseObject ro = ResponseObject.getInstance();
+		Map<String, Object> data = new HashMap<String, Object>();
 		try {
 			int userId = user.getUserId();
-			Map<String, Object> data = new HashMap<String, Object>();
 			UcUser ucUser = TokenAuth.getUser(userId);
 			data.put("ucUser", ucUser);
 			ro.setOspState(200);

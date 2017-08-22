@@ -4,18 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.osp.ucenter.common.exception.MyRuntimeException;
+import com.osp.ucenter.common.model.ResponseObject;
+import com.osp.ucenter.common.utils.JsonUtil;
 import com.osp.ucenter.common.utils.LoggerUtils;
 import com.osp.ucenter.mybatis.page.Pagination;
 import com.osp.ucenter.persistence.model.UcRole;
@@ -29,7 +26,7 @@ import com.osp.ucenter.service.UcRoleService;
 @Controller
 @Scope(value = "prototype")
 @RequestMapping(value = "/role")
-public class SysRoleController extends BaseController {
+public class SysRoleController {
 
 	@Autowired
 	UcRoleService ucRoleService;
@@ -39,23 +36,32 @@ public class SysRoleController extends BaseController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/index")
+	@RequestMapping(value = "/roleLists")
 	@ResponseBody
-	public Map<String, Object> index(String findContent) {
+	public String roleLists() {
+		ResponseObject ro = ResponseObject.getInstance();
 		try {
-			Map<String,Object> modelMap = new HashMap<String,Object>();
-			modelMap.put("findContent", findContent);
-			Pagination<UcRole> role = ucRoleService.findPage(modelMap, pageNo, pageSize);
-			//role.setTotalCount(ucRoleService.findCount());
-			System.out.println("总共页数======"+role.getTotalPage());
+			// @RequestBody Pagination<UcRole> ucRole
+			Map<String, Object> modelMap = new HashMap<String, Object>();
+			Map<String, Object> data = new HashMap<String, Object>();
+			modelMap.put("findContent", "");
+			Pagination<UcRole> role = ucRoleService.findPage(modelMap, 1, 10);
+			System.out.println("总共页数======" + role.getTotalPage());
 			for (UcRole ucRole : role.getList()) {
 				System.out.println("角色信息====" + ucRole.getRoleName());
 			}
-			resultMap.put("status", 200);
+			data.put("ucRole", role.getList());
+			ro.setOspState(200);
+			ro.setData(data);
+			return JsonUtil.beanToJson(ro);
+		} catch (MyRuntimeException e) {
+			ro.setOspState(400);
+			return JsonUtil.beanToJson(ro);
 		} catch (Exception e) {
-
+			ro.setOspState(402);
+			e.printStackTrace();
+			return JsonUtil.beanToJson(ro);
 		}
-		return resultMap;
 	}
 
 	/**
@@ -68,9 +74,7 @@ public class SysRoleController extends BaseController {
 		try {
 			ucRoles = ucRoleService.selectAllRoles();
 		} catch (Exception e) {
-			resultMap.put("status", 500);
-			resultMap.put("message", "获取当前页的角色列表失败，请刷新后再试！");
-			LoggerUtils.fmtError(getClass(), e, "获取当前页的角色列表失败。source[%s]", ucRoles.toString());
+			LoggerUtils.fmtError(getClass(), e, "获取角色列表错误。source[%s]", ucRoles.toString());
 		}
 		return ucRoles;
 	}
@@ -84,28 +88,35 @@ public class SysRoleController extends BaseController {
 	 */
 	@RequestMapping(value = "/addRole")
 	@ResponseBody
-	public Map<String, Object> addRole(HttpServletRequest request, RedirectAttributes attr) {
-		// String roleName = RequestUtil.getString(request, "roleName");
+	public String addRole() {
+		// @RequestBody Pagination<UcRole> ucRole
+		ResponseObject ro = ResponseObject.getInstance();
+		Map<String, Object> data = new HashMap<String, Object>();
 		UcRole testUcRole = new UcRole();
-		testUcRole.setRoleName("普通用户");
 		try {
-			ArrayList<UcRole> ucRoles = ucRoleService.selectAllRoles();
+			testUcRole.setRoleName("普通用户828");
+			ArrayList<UcRole> ucRoles = this.getAllRoles();
 			for (UcRole ucRole : ucRoles) {
-				if (ucRole.getRoleName().equals(testUcRole.getRoleName())) {
-					resultMap.put("status", 500);
-					resultMap.put("message", "此角色名称已存在！");
-					return resultMap;
+				if (ucRole.getRoleName().trim().equals(testUcRole.getRoleName().trim())) {
+					ro.setOspState(500);
+					data.put("UcRole", "此角色名称已存在！");
+					return JsonUtil.beanToJson(ro);
 				}
 			}
-			int count = ucRoleService.insertSelective(testUcRole);
-			resultMap.put("status", 200);
-			resultMap.put("successCount", count);
-		} catch (Exception e) {
-			resultMap.put("status", 500);
-			resultMap.put("message", "添加失败，请刷新后再试！");
+			ucRoleService.insertSelective(testUcRole);
+			ro.setOspState(200);
+			data.put("UcRole", this.getAllRoles());
+			ro.setData(data);
+			return JsonUtil.beanToJson(ro);
+		} catch (MyRuntimeException e) {
+			ro.setOspState(400);
 			LoggerUtils.fmtError(getClass(), e, "添加角色报错。source[%s]", testUcRole.toString());
+			return JsonUtil.beanToJson(ro);
+		} catch (Exception e) {
+			ro.setOspState(402);
+			LoggerUtils.fmtError(getClass(), e, "添加角色报错。source[%s]", testUcRole.toString());
+			return JsonUtil.beanToJson(ro);
 		}
-		return resultMap;
 	}
 
 	/**
@@ -114,11 +125,22 @@ public class SysRoleController extends BaseController {
 	 * @RequestMapping(value="/deleteRole",method=RequestMethod.POST) @param id
 	 * @return
 	 */
-	@RequestMapping(value = "/deleteRole", method = RequestMethod.GET)
+	@RequestMapping(value = "/deleteRole")
 	@ResponseBody
-	public Map<String, Object> deleteRoleById(String ids) {
-		System.out.println(SecurityUtils.getSubject().getPrincipal());
-		return ucRoleService.deleteRoleById("1");
+	public String deleteRoleById() {
+		// @RequestBody Pagination<UcRole> ucRole
+		ResponseObject ro = ResponseObject.getInstance();
+		try {
+			ro.setOspState(200);
+			ro.setData(ucRoleService.deleteRoleById("5,6,7"));
+			return JsonUtil.beanToJson(ro);
+		} catch (MyRuntimeException e) {
+			ro.setOspState(400);
+			return JsonUtil.beanToJson(ro);
+		} catch (Exception e) {
+			ro.setOspState(402);
+			return JsonUtil.beanToJson(ro);
+		}
 	}
 
 	/**

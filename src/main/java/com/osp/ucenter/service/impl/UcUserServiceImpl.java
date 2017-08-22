@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.osp.ucenter.mybatis.BaseMybatisDao;
 import com.osp.ucenter.mybatis.page.Pagination;
+import com.osp.ucenter.persistence.bo.UserRoleAllocationBo;
 import com.osp.ucenter.persistence.dao.UcUserMapper;
-import com.osp.ucenter.persistence.model.UcRole;
 import com.osp.ucenter.persistence.model.UcUser;
 import com.osp.ucenter.service.UcUserService;
 
@@ -26,6 +26,14 @@ public class UcUserServiceImpl extends BaseMybatisDao<UcUserMapper> implements U
 	@Autowired
 	private UcUserMapper ucUserMapper;
 
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Pagination<UserRoleAllocationBo> findUserAndRole(Map modelMap,
+			Integer pageNo, Integer pageSize) {
+		return super.findPage("findUserAndRole", "findCount", modelMap, pageNo, pageSize);
+	}
+	
 	@Override
 	public Pagination<UcUser> findPage(Map<String, Object> resultMap,Integer pageNo, Integer pageSize) {
 		return super.findPage(resultMap, pageNo, pageSize);
