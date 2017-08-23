@@ -40,21 +40,15 @@ public class SysUserController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/userLists")
-	public String userLists() {
+	public String userLists(@RequestBody Pagination<UcUser> pagination) {
 		ResponseObject ro = ResponseObject.getInstance();
+		Map<String, Object> findContent = new HashMap<String, Object>();
 		Map<String, Object> data = new HashMap<String, Object>();
 		try {
-			// @RequestBody Pagination<UcUser> ucUser
-			// Pagination<UcUser> ucUsers = ucUserService.findPage(new
-			// HashMap<String, Object>(), ucUser.getPageNo(),
-			// ucUser.getPageSize());
-			Pagination<UcUser> ucUsers = ucUserService.findPage(new HashMap<String, Object>(), 1, 10);
+			findContent.put("findContent", pagination.getFindContent());
+			Pagination<UcUser> ucUsers = ucUserService.findPage(findContent, pagination.getPageNo(),pagination.getPageSize());
 			for (UcUser tempUcUser : ucUsers.getList()) {
 				tempUcUser.setUserPwd("");
-			}
-			System.out.println("总共页数======" + ucUsers.getTotalPage());
-			for (UcUser user : ucUsers.getList()) {
-				System.out.println("用户信息====" + user.getUserName());
 			}
 			data.put("ucUser", ucUsers.getList());
 			ro.setOspState(200);
@@ -77,15 +71,13 @@ public class SysUserController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/onlineUsers")
-	public String onlineUsers() {
+	public String onlineUsers(@RequestBody Pagination<UcUser> pagination) {
 		ResponseObject ro = ResponseObject.getInstance();
 		Map<String, Object> data = new HashMap<String, Object>();
 		try {
-			// @RequestBody Pagination<UcUser> ucUser
-			Pagination<UcUser> ucUsers = new Pagination<UcUser>();
-			ucUsers.setTotalCount(TokenAuth.jwtTokens.size());
-			int start = (ucUsers.getPageNo() - 1) * ucUsers.getPageSize();
-			int end = start + ucUsers.getPageSize();
+			pagination.setTotalCount(TokenAuth.jwtTokens.size());
+			int start = (pagination.getPageNo() - 1) * pagination.getPageSize();
+			int end = start + pagination.getPageSize();
 			int i = 0;
 			List<UcUser> lists = new ArrayList<>();
 			for (String jwtToken : TokenAuth.jwtTokens.keySet()) {
@@ -93,12 +85,8 @@ public class SysUserController {
 					lists.add(TokenAuth.jwtTokens.get(jwtToken));
 				}
 			}
-			ucUsers.setList(lists);
-			System.out.println("总共页数======" + ucUsers.getTotalPage());
-			for (UcUser user : ucUsers.getList()) {
-				System.out.println("在线用户信息====" + user.getUserName());
-			}
-			data.put("ucUser", ucUsers.getList());
+			pagination.setList(lists);
+			data.put("ucUser", pagination.getList());
 			ro.setOspState(200);
 			ro.setData(data);
 			return JsonUtil.beanToJson(ro);

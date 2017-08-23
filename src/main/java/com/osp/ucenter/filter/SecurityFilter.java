@@ -42,13 +42,13 @@ public class SecurityFilter implements Filter {
 		restApp.put("/user/auth", 1);
 		restApp.put("/role/deleteRole", 1);
 		restApp.put("/role/addRole", 1);
-		restApp.put("/user/userLists", 1);
+		restApp.put("/role/roleLists", 1);
 		restApp.put("/user/userLists", 1);
 		restApp.put("/user/onlineUsers", 1);
 		restApp.put("/userRole/allocationLists", 1);
 		restApp.put("/userRole/addRole2User", 1);
 		restApp.put("/userRole/selectRoleByUserId", 1);
-		//restApp.put("/userRole/addRole2User", 1);
+		restApp.put("/userRole/clearRoleByUserIds", 1);
 	}
 	
 	public Integer getRestApiValue(String rest) {

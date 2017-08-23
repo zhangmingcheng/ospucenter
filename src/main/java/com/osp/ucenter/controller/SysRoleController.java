@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -38,18 +39,13 @@ public class SysRoleController {
 	 */
 	@RequestMapping(value = "/roleLists")
 	@ResponseBody
-	public String roleLists() {
+	public String roleLists(@RequestBody Pagination<UcRole> pagination) {
 		ResponseObject ro = ResponseObject.getInstance();
+		Map<String, Object> findContent = new HashMap<String, Object>();
+		Map<String, Object> data = new HashMap<String, Object>();
 		try {
-			// @RequestBody Pagination<UcRole> ucRole
-			Map<String, Object> modelMap = new HashMap<String, Object>();
-			Map<String, Object> data = new HashMap<String, Object>();
-			modelMap.put("findContent", "");
-			Pagination<UcRole> role = ucRoleService.findPage(modelMap, 1, 10);
-			System.out.println("总共页数======" + role.getTotalPage());
-			for (UcRole ucRole : role.getList()) {
-				System.out.println("角色信息====" + ucRole.getRoleName());
-			}
+			findContent.put("findContent", pagination.getFindContent());
+			Pagination<UcRole> role = ucRoleService.findPage(findContent, pagination.getPageNo(), pagination.getPageSize());
 			data.put("ucRole", role.getList());
 			ro.setOspState(200);
 			ro.setData(data);
@@ -88,33 +84,30 @@ public class SysRoleController {
 	 */
 	@RequestMapping(value = "/addRole")
 	@ResponseBody
-	public String addRole() {
-		// @RequestBody Pagination<UcRole> ucRole
+	public String addRole(@RequestBody UcRole ucRole) {
 		ResponseObject ro = ResponseObject.getInstance();
 		Map<String, Object> data = new HashMap<String, Object>();
-		UcRole testUcRole = new UcRole();
 		try {
-			testUcRole.setRoleName("普通用户828");
 			ArrayList<UcRole> ucRoles = this.getAllRoles();
-			for (UcRole ucRole : ucRoles) {
-				if (ucRole.getRoleName().trim().equals(testUcRole.getRoleName().trim())) {
+			for (UcRole tempUcRole : ucRoles) {
+				if (tempUcRole.getRoleName().trim().equals(ucRole.getRoleName().trim())) {
 					ro.setOspState(500);
 					data.put("UcRole", "此角色名称已存在！");
 					return JsonUtil.beanToJson(ro);
 				}
 			}
-			ucRoleService.insertSelective(testUcRole);
+			ucRoleService.insertSelective(ucRole);
 			ro.setOspState(200);
 			data.put("UcRole", this.getAllRoles());
 			ro.setData(data);
 			return JsonUtil.beanToJson(ro);
 		} catch (MyRuntimeException e) {
 			ro.setOspState(400);
-			LoggerUtils.fmtError(getClass(), e, "添加角色报错。source[%s]", testUcRole.toString());
+			LoggerUtils.fmtError(getClass(), e, "添加角色报错。source[%s]", ucRole.toString());
 			return JsonUtil.beanToJson(ro);
 		} catch (Exception e) {
 			ro.setOspState(402);
-			LoggerUtils.fmtError(getClass(), e, "添加角色报错。source[%s]", testUcRole.toString());
+			LoggerUtils.fmtError(getClass(), e, "添加角色报错。source[%s]", ucRole.toString());
 			return JsonUtil.beanToJson(ro);
 		}
 	}
@@ -127,12 +120,11 @@ public class SysRoleController {
 	 */
 	@RequestMapping(value = "/deleteRole")
 	@ResponseBody
-	public String deleteRoleById() {
-		// @RequestBody Pagination<UcRole> ucRole
+	public String deleteRoleById(@RequestBody String ucRoleIds) {
 		ResponseObject ro = ResponseObject.getInstance();
 		try {
 			ro.setOspState(200);
-			ro.setData(ucRoleService.deleteRoleById("5,6,7"));
+			ro.setData(ucRoleService.deleteRoleById(ucRoleIds));
 			return JsonUtil.beanToJson(ro);
 		} catch (MyRuntimeException e) {
 			ro.setOspState(400);

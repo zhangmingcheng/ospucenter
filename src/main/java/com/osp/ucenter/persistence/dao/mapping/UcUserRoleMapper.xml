@@ -8,14 +8,18 @@
     
   <!-- 根据用户ID删除-->
   <delete id="deleteByUserId">
-  	delete from uc_user_role where user_id = #{id,jdbcType=BIGINT}
+  	delete from uc_user_role where user_id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteRoleByUserIds">
-  	delete from uc_user_role where user_id in(#{userIds,jdbcType=VARCHAR})
+  	delete from uc_user_role where user_id in 
+  	 <foreach item="item" index="index" collection="userIds" 
+        open="(" separator="," close=")">
+         #{item}
+     </foreach>
   </delete>
   <!-- 根据用户roleId查询用户ID -->
   <select id="findUserIdByRoleId" resultType="long">
-  	select uid from u_user_role where rid =  #{id,jdbcType=BIGINT}
+  	select uid from u_user_role where rid =  #{id,jdbcType=INTEGER}
   </select>
   
   <insert id="insert" parameterType="com.osp.ucenter.persistence.model.UcUserRole">

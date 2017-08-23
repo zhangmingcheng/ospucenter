@@ -14,7 +14,7 @@ import com.osp.ucenter.persistence.model.UcUser;
  */
 public interface UcUserService {
 	
-	Pagination<UserRoleAllocationBo> findUserAndRole(Map modelMap,
+	Pagination<UserRoleAllocationBo> findUserAndRole(Map<String,Object> modelMap,
 			Integer pageNo, Integer pageSize);
 	
 	Pagination<UcUser> findPage(Map<String, Object> resultMap, Integer pageNo, Integer pageSize);

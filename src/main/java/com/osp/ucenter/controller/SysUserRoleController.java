@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -39,13 +40,13 @@ public class SysUserRoleController {
 	 */
 	@RequestMapping("/allocationLists")
 	@ResponseBody
-	public String allocationLists() {
-		// @RequestBody Pagination<UserRoleAllocationBo>
+	public String allocationLists(@RequestBody Pagination<UserRoleAllocationBo> pagination) {
 		ResponseObject ro = ResponseObject.getInstance();
+		Map<String,Object> findContent = new HashMap<String, Object>();
 		Map<String, Object> data = new HashMap<String, Object>();
 		try {
-			Pagination<UserRoleAllocationBo> boPage = ucUserService.findUserAndRole(new HashMap<String, Object>(), 1,
-					4);
+			findContent.put("findContent", pagination.getFindContent());
+			Pagination<UserRoleAllocationBo> boPage = ucUserService.findUserAndRole(findContent, pagination.getFilterNo(),pagination.getPageSize());
 			data.put("ucUserRole", boPage.getList());
 			ro.setOspState(200);
 			ro.setData(data);
@@ -74,7 +75,7 @@ public class SysUserRoleController {
 	public String addRole2User(Integer userId, String ids) {
 		ResponseObject ro = ResponseObject.getInstance();
 		try {
-			Map<String, Object> data = ucUserService.addRole2User(2, "");
+			Map<String, Object> data = ucUserService.addRole2User(userId,ids);
 			ro.setOspState(200);
 			ro.setData(data);
 			return JsonUtil.beanToJson(ro);
@@ -100,10 +101,10 @@ public class SysUserRoleController {
 		ResponseObject ro = ResponseObject.getInstance();
 		Map<String, Object> data = new HashMap<String, Object>();
 		try {
-			List<UcRoleBo> ucRoleBos = ucUserService.selectRoleByUserId(1);
+			List<UcRoleBo> ucRoleBos = ucUserService.selectRoleByUserId(id);
 			List<UcRoleBo> dataRoleBos = new ArrayList<>();
-			for(UcRoleBo ucRoleBo : ucRoleBos){
-				if(ucRoleBo.isCheck()==true){
+			for (UcRoleBo ucRoleBo : ucRoleBos) {
+				if (ucRoleBo.isCheck() == true) {
 					dataRoleBos.add(ucRoleBo);
 				}
 			}
@@ -122,16 +123,27 @@ public class SysUserRoleController {
 	}
 
 	/**
-	 * 根据用户id清空角色。
+	 * 根据用户id清空其所属角色。 用户ID 以','分隔
 	 * 
 	 * @param userIds
-	 *            用户ID ，以‘,’间隔
+	 * 
 	 * @return
 	 */
 	@RequestMapping(value = "clearRoleByUserIds")
 	@ResponseBody
 	public String clearRoleByUserIds(String userIds) {
-		// return userService.deleteRoleByUserIds(userIds);
-		return "";
+		ResponseObject ro = ResponseObject.getInstance();
+		try {
+			ro.setOspState(200);
+			ro.setData(ucUserService.deleteRoleByUserIds(userIds.trim()));
+			return JsonUtil.beanToJson(ro);
+		} catch (MyRuntimeException e) {
+			ro.setOspState(400);
+			return JsonUtil.beanToJson(ro);
+		} catch (Exception e) {
+			ro.setOspState(402);
+			e.printStackTrace();
+			return JsonUtil.beanToJson(ro);
+		}
 	}
 }

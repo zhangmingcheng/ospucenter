@@ -1,7 +1,6 @@
 package com.osp.ucenter.persistence.dao;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -15,7 +14,7 @@ public interface UcUserRoleMapper {
 
 	int deleteByUserId(@Param("id") Integer id);
 
-	int deleteRoleByUserIds(Map<String, Object> resultMap);
+	int deleteRoleByUserIds(@Param("userIds") String[] userIds);
 
 	List<Integer> findUserIdByRoleId(Integer id);
 }
