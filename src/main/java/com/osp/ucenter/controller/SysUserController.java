@@ -155,7 +155,13 @@ public class SysUserController {
 		ResponseObject ro = ResponseObject.getInstance();
 		Map<String, Object> data = new HashMap<String, Object>();
 		try {
+		    UcUser dbUser = ucUserService.findUser(user.getUserId());
 			user = UserManager.md5Pswd(user);
+			if(user.getUserPwd().equals(dbUser.getUserPwd())==false){
+                ro.setOspState(500);	
+            	data.put("ucUser", "原密码不对！！！");
+            	return JsonUtil.beanToJson(ro);
+			}
 			int status = ucUserService.updateByPrimaryKeySelective(user);
 			if (status > 0) {
 				UcUser ucUser = ucUserService.findUser(user.getUserId());
