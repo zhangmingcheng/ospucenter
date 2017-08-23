@@ -42,7 +42,7 @@
   <select id="findUserAndRole" resultType="com.osp.ucenter.persistence.bo.UserRoleAllocationBo">
   	select u.user_id userId,u.user_name userName,u.systemcode,u.create_time createTime,u.last_login_time lastLoginTime,u.user_email userEmail,group_concat(ur.role_Name) roleNames,group_concat(ur.role_id) roleIds from
 	 uc_user u
-	left join uc_userrole uur on uur.user_id = u.user_id
+	left join uc_user_role uur on uur.user_id = u.user_id
 	left join uc_role ur on ur.role_id = uur.role_id
 	<where>
 	 <if test="findContent != null and findContent !='' " >
@@ -53,6 +53,12 @@
      </where>
 	group by u.user_id
 	<include refid="limit_sql" />
+  </select>
+  <!--根据用户编号查找用户角色-->
+  <select id="selectRoleByUserId" resultType="com.osp.ucenter.persistence.bo.UcRoleBo">	
+		select ur.role_id roleId,ur.role_Name roleName,ur.SystemCode systemcode,ifnull(uu.user_id,0) marker,uu.user_id userId from uc_role ur
+		left join uc_user_role uur on uur.role_id = ur.role_id
+		left join (select user_id from uc_user where user_id =#{id,jdbcType=BIGINT}) uu on uu.user_id = uur.user_id
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--

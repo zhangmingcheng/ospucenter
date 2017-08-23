@@ -45,7 +45,10 @@ public class SecurityFilter implements Filter {
 		restApp.put("/user/userLists", 1);
 		restApp.put("/user/userLists", 1);
 		restApp.put("/user/onlineUsers", 1);
-		restApp.put("/userRole/allocation", 1);
+		restApp.put("/userRole/allocationLists", 1);
+		restApp.put("/userRole/addRole2User", 1);
+		restApp.put("/userRole/selectRoleByUserId", 1);
+		//restApp.put("/userRole/addRole2User", 1);
 	}
 	
 	public Integer getRestApiValue(String rest) {

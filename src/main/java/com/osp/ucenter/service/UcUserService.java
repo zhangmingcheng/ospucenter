@@ -1,8 +1,10 @@
 package com.osp.ucenter.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.osp.ucenter.mybatis.page.Pagination;
+import com.osp.ucenter.persistence.bo.UcRoleBo;
 import com.osp.ucenter.persistence.bo.UserRoleAllocationBo;
 import com.osp.ucenter.persistence.model.UcUser;
 
@@ -36,8 +38,11 @@ public interface UcUserService {
 	Map<String, Object> deleteUserById(String ids);
 
 	Map<String, Object> updateForbidUserById(Long id, Long status);
+	
+	List<UcRoleBo> selectRoleByUserId(Integer id);
 
-	Map<String, Object> addRole2User(Long userId, String ids);
+	Map<String, Object> addRole2User(Integer userId, String ids);
 
 	Map<String, Object> deleteRoleByUserIds(String userIds);
+	
 }
