@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.osp.common.json.JsonUtil;
@@ -38,7 +39,7 @@ public class SysUserRoleController {
 	 * @param findContent
 	 * @return
 	 */
-	@RequestMapping("/allocationLists")
+	@RequestMapping(value = "/allocationLists",method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
 	public String allocationLists(@RequestBody Pagination<UserRoleAllocationBo> pagination) {
 		ResponseObject ro = ResponseObject.getInstance();
@@ -70,7 +71,7 @@ public class SysUserRoleController {
 	 *            角色ID，以‘,’间隔
 	 * @return
 	 */
-	@RequestMapping("/addRole2User")
+	@RequestMapping(value = "/addRole2User",method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
 	public String addRole2User(Integer userId, String ids) {
 		ResponseObject ro = ResponseObject.getInstance();
@@ -95,7 +96,7 @@ public class SysUserRoleController {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping("/selectRoleByUserId")
+	@RequestMapping(value = "/selectRoleByUserId",method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
 	public String selectRoleByUserId(Integer id) {
 		ResponseObject ro = ResponseObject.getInstance();
@@ -129,7 +130,7 @@ public class SysUserRoleController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "clearRoleByUserIds")
+	@RequestMapping(value = "clearRoleByUserIds",method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
 	public String clearRoleByUserIds(String userIds) {
 		ResponseObject ro = ResponseObject.getInstance();

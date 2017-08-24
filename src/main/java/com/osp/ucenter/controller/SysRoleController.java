@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.osp.common.json.JsonUtil;
@@ -37,7 +38,7 @@ public class SysRoleController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/roleLists")
+	@RequestMapping(value = "/roleLists",method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
 	public String roleLists(@RequestBody Pagination<UcRole> pagination) {
 		ResponseObject ro = ResponseObject.getInstance();
@@ -82,7 +83,7 @@ public class SysRoleController {
 	 * @param role
 	 * @return
 	 */
-	@RequestMapping(value = "/addRole")
+	@RequestMapping(value = "/addRole",method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
 	public String addRole(@RequestBody UcRole ucRole) {
 		ResponseObject ro = ResponseObject.getInstance();
@@ -118,7 +119,7 @@ public class SysRoleController {
 	 * @RequestMapping(value="/deleteRole",method=RequestMethod.POST) @param id
 	 * @return
 	 */
-	@RequestMapping(value = "/deleteRole")
+	@RequestMapping(value = "/deleteRole",method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
 	public String deleteRoleById(@RequestBody String ucRoleIds) {
 		ResponseObject ro = ResponseObject.getInstance();

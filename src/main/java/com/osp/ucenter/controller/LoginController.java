@@ -36,7 +36,7 @@ import com.osp.ucenter.service.UcUserService;
 @Controller
 @Scope(value = "prototype")
 @RequestMapping(value = "/user")
-public class LoginController extends BaseController {
+public class LoginController{
 
 	@Autowired
 	UcUserService ucUserService;
@@ -90,6 +90,7 @@ public class LoginController extends BaseController {
 	@ResponseBody
 	@RequestMapping(value = "/register")
 	public Map<String, Object> register(HttpServletRequest request, RedirectAttributes attr) {
+		HashMap<String, Object> resultMap = new HashMap<>();
 		resultMap.put("status", 400);
 		UcUser ucUser = new UcUser();
 		ucUser.setUserName("test111");
@@ -115,7 +116,7 @@ public class LoginController extends BaseController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/auth", method = RequestMethod.GET)
+	@RequestMapping(value = "/auth",  method = { RequestMethod.GET, RequestMethod.POST })
 	public String noauth() {
 		ResponseObject ro = ResponseObject.getInstance();
 		ro.setOspState(402);

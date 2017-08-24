@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.osp.common.json.JsonUtil;
@@ -39,7 +40,7 @@ public class SysUserController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/userLists")
+	@RequestMapping(value = "/userLists",method = { RequestMethod.GET, RequestMethod.POST })
 	public String userLists(@RequestBody Pagination<UcUser> pagination) {
 		ResponseObject ro = ResponseObject.getInstance();
 		Map<String, Object> findContent = new HashMap<String, Object>();
@@ -70,7 +71,7 @@ public class SysUserController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/onlineUsers")
+	@RequestMapping(value = "/onlineUsers",method = { RequestMethod.GET, RequestMethod.POST })
 	public String onlineUsers(@RequestBody Pagination<UcUser> pagination) {
 		ResponseObject ro = ResponseObject.getInstance();
 		Map<String, Object> data = new HashMap<String, Object>();
@@ -107,7 +108,7 @@ public class SysUserController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/updateUserInfo")
+	@RequestMapping(value = "/updateUserInfo",method = { RequestMethod.GET, RequestMethod.POST })
 	public String updateUserInfo(@RequestBody UcUser user) {
 		ResponseObject ro = ResponseObject.getInstance();
 		Map<String, Object> data = new HashMap<String, Object>();
@@ -138,7 +139,7 @@ public class SysUserController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/updateUserPsw")
+	@RequestMapping(value = "/updateUserPsw",method = { RequestMethod.GET, RequestMethod.POST })
 	public String updateUserPsw(@RequestBody UcUser user) {
 		ResponseObject ro = ResponseObject.getInstance();
 		Map<String, Object> data = new HashMap<String, Object>();
@@ -176,7 +177,7 @@ public class SysUserController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/userInfo")
+	@RequestMapping(value = "/userInfo",method = { RequestMethod.GET, RequestMethod.POST })
 	public String userInfo(@RequestBody UcUser user) {
 		ResponseObject ro = ResponseObject.getInstance();
 		Map<String, Object> data = new HashMap<String, Object>();
