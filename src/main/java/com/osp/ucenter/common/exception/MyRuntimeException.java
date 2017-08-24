@@ -10,7 +10,7 @@ public class MyRuntimeException extends RuntimeException {
 
 	public MyRuntimeException(String msg) {
 		super(msg);
-		this.code = 99999;// 未知
+		this.code = 99999;
 		this.msg = msg;
 	}
 	
