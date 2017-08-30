@@ -151,6 +151,7 @@ public class SysUserController {
             	data.put("ucUser", "原密码不对！！！");
             	return JsonUtil.beanToJson(ro);
 			}
+			user.setUserPwd(UserManager.md5Pswd(user.getUserName(), user.getNewPwd()));
 			int status = ucUserService.updateByPrimaryKeySelective(user);
 			if (status > 0) {
 				UcUser ucUser = ucUserService.findUser(user.getUserId());
