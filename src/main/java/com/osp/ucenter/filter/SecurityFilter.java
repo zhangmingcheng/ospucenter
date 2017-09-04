@@ -43,6 +43,7 @@ public class SecurityFilter implements Filter {
 		restApp.put("/role/deleteRole", 1);
 		restApp.put("/role/addRole", 1);
 		restApp.put("/role/roleLists", 1);
+		restApp.put("/rolePermission/rolePermissionAllocation", 1);	
 		restApp.put("/user/userLists", 1);
 		restApp.put("/user/onlineUsers", 1);
 		restApp.put("/userRole/allocationLists", 1);
@@ -52,7 +53,10 @@ public class SecurityFilter implements Filter {
 		restApp.put("/permission/addMenu", 1);
 		restApp.put("/permission/deleteMenu", 1);
 		restApp.put("/permission/deletePermission", 1);
+		restApp.put("/permission/permissionLists", 1);
+		restApp.put("/rolePermission/selectPermissionByRoleId", 1);
 		restApp.put("/rolePermission/clearPermissionByRoleIds", 1);	
+		restApp.put("/rolePermission/addPermission2Role", 1);		
 		
 	}
 	

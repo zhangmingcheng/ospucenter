@@ -3,6 +3,7 @@ package com.osp.ucenter.persistence.dao;
 import java.util.List;
 
 import com.osp.ucenter.persistence.bo.UcPermissionBo;
+import com.osp.ucenter.persistence.bo.UcPermissionMenuActionBo;
 import com.osp.ucenter.persistence.model.UcPermission;
 
 public interface UcPermissionMapper {
@@ -21,6 +22,9 @@ public interface UcPermissionMapper {
 
     int updateByPrimaryKey(UcPermission record);
     
+    List<UcPermissionMenuActionBo> selectPermissions();
+    
     List<UcPermissionBo> selectPermissionByRoleId(Integer id);
+    
     
 }

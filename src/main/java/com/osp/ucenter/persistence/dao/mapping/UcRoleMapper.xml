@@ -25,6 +25,16 @@
       </if>
       </where>
   </sql>
+  <!-- 权限分配页面数据展示 -->
+  <select id="selectPermissionByRoleIds" resultType="com.osp.ucenter.persistence.bo.UcRolePermissionAllocationBo">
+  	select ur.role_id roleId,ur.role_Name roleName,group_concat(m.menu_name) menuNames,group_concat(a.action_Name) actionNames,group_concat(p.Permission_id) permissionIds from 
+	uc_permission p
+	left join uc_menu m on m.menu_id = p.Menu_id
+	left join uc_action a on a.Action_Id = p.Action_id
+        right join uc_role_permission urp on urp.permission = p.Permission_id
+	right join uc_role ur on ur.role_id = urp.roleid
+	group by ur.role_id
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

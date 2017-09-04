@@ -13,6 +13,7 @@ import com.osp.ucenter.common.utils.LoggerUtils;
 import com.osp.ucenter.common.utils.StringUtils;
 import com.osp.ucenter.mybatis.BaseMybatisDao;
 import com.osp.ucenter.persistence.bo.UcPermissionBo;
+import com.osp.ucenter.persistence.bo.UcPermissionMenuActionBo;
 import com.osp.ucenter.persistence.dao.UcActionMapper;
 import com.osp.ucenter.persistence.dao.UcMenuMapper;
 import com.osp.ucenter.persistence.dao.UcPermissionActionMapper;
@@ -242,10 +243,14 @@ public class UcPermissionServiceImpl extends BaseMybatisDao<UcPermissionMapper> 
 		return null;
 	}
 
+	/**
+	 * 操作角色的权限
+	 */
 	@Override
 	public Map<String, Object> addPermission2Role(Integer roleId, String ids) {
-		// TODO Auto-generated method stub
-		return null;
+		//先删除原有的。
+		ucRolePermissionMapper.deleteByRid(roleId);
+		return executePermission(roleId, ids);
 	}
 
 	/**
@@ -278,6 +283,11 @@ public class UcPermissionServiceImpl extends BaseMybatisDao<UcPermissionMapper> 
 	@Override
 	public List<UcPermissionBo> selectPermissionByRoleId(Integer id) {
 		return ucPermissionMapper.selectPermissionByRoleId(id);
+	}
+
+	@Override
+	public List<UcPermissionMenuActionBo> selectPermissions() {
+		return ucPermissionMapper.selectPermissions();
 	}
 
 }

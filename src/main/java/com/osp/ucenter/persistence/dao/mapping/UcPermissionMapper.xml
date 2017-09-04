@@ -15,12 +15,25 @@
     from uc_permission
     where Permission_id = #{permissionId,jdbcType=INTEGER}
   </select>
+  <!-- 取得权限列表所有数据 -->
+  <select id="selectPermissions" parameterType="java.lang.Integer" resultType="com.osp.ucenter.persistence.bo.UcPermissionMenuActionBo">
+    select  p.Permission_id PermissionId,p.Permission_Type permissionType,p.Menu_id menuId,p.Action_id actionId,m.menu_name menuName,m.menu_url menuUrl,
+        a.action_Name actionName,a.action_Code actionCode  from
+	 uc_permission p
+	left join uc_menu m on m.menu_id = p.Menu_id
+	left join uc_action a on a.Action_Id = p.Action_id
+	group by p.Permission_id
+  </select>
   <!-- 根据角色获取权限，marker:0,没有权限，marker：非0(和up.id)一致表示有权限。 -->
   <select id="selectPermissionByRoleId" resultType="com.osp.ucenter.persistence.bo.UcPermissionBo">
-	select up.Permission_id,up.Menu_id,up.Permission_Type,ur.role_id roleId,ifnull(ur.role_id,0) marker from uc_permission up
-		right join uc_role_permission urp on urp.permission = up.Permission_id
-		right join (select role_id from uc_role where role_id = 1) ur on ur.role_id = urp.roleid
-		group by up.Permission_id;
+	select  p.Permission_id PermissionId,p.Permission_Type permissionType,p.Menu_id menuId,p.Action_id actionId,m.menu_name menuName,m.menu_url menuUrl,
+        a.action_Name actionName,a.action_Code actionCode,ur.role_id roleId,ifnull(ur.role_id,0) marker from
+	 uc_permission p
+	left join uc_menu m on m.menu_id = p.Menu_id
+	left join uc_action a on a.Action_Id = p.Action_id
+	right join uc_role_permission urp on urp.permission = p.Permission_id
+	right join (select role_id from uc_role where role_id = #{id,jdbcType=INTEGER}) ur on ur.role_id = urp.roleid
+	group by p.Permission_id;
   </select>
   <!-- menu与permission是一对一关系:根据menuId查寻 -->
   <select id="selectByMenuId" parameterType="java.lang.Integer" resultType="java.lang.Integer">

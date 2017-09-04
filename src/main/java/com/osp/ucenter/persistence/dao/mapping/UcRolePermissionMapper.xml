@@ -12,8 +12,12 @@
   <select id="findRolePermissionByPid" resultMap="BaseResultMap">
   	select <include refid="Base_Column_List"/>
   	from uc_role_permission
-  	where permission =  #{permissionId,jdbcType=BIGINT}
+  	where permission =  #{permissionId,jdbcType=INTEGER}
   </select> 
+   <!-- 根据角色ID删除-->
+  <delete id="deleteByRid">
+  	delete from uc_role_permission where roleid =  #{roleid,jdbcType=INTEGER}
+  </delete>
     <!-- 根据角色IDs删除-->
   <delete id="deleteByRids">
   	delete from uc_role_permission where roleid in

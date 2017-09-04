@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.osp.ucenter.common.utils.LoggerUtils;
 import com.osp.ucenter.mybatis.BaseMybatisDao;
 import com.osp.ucenter.mybatis.page.Pagination;
+import com.osp.ucenter.persistence.bo.UcRolePermissionAllocationBo;
 import com.osp.ucenter.persistence.dao.UcRoleMapper;
 import com.osp.ucenter.persistence.model.UcRole;
 import com.osp.ucenter.service.UcRoleService;
@@ -139,5 +140,10 @@ public class UcRoleServiceImpl extends BaseMybatisDao<UcRoleMapper>  implements 
 	@Override
 	public ArrayList<UcRole> selectAllRoles() {
 		return ucRoleMapper.selectAllRoles();		
+	}
+
+	@Override
+	public List<UcRolePermissionAllocationBo> selectPermissionByRoleIds() {
+		return ucRoleMapper.selectPermissionByRoleIds();
 	}
 }

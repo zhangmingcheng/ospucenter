@@ -1,5 +1,9 @@
 package com.osp.ucenter.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.osp.common.json.JsonUtil;
 import com.osp.ucenter.common.exception.MyRuntimeException;
 import com.osp.ucenter.common.model.ResponseObject;
+import com.osp.ucenter.persistence.bo.UcPermissionMenuActionBo;
 import com.osp.ucenter.persistence.model.UcMenu;
 import com.osp.ucenter.service.UcPermissionService;
 
@@ -27,6 +32,31 @@ public class SysPermissionController {
 	@Autowired
 	UcPermissionService ucPermissionService;
 
+	/**
+	 * 权限列表
+	 * @return
+	 */
+	@RequestMapping(value = "/permissionLists", method = { RequestMethod.GET, RequestMethod.POST })
+	@ResponseBody
+	public String permissionLists() {
+		ResponseObject ro = ResponseObject.getInstance();
+		Map<String, Object> data = new HashMap<String,Object>();
+		try {
+			List<UcPermissionMenuActionBo> ucPermissionMenuActionBo = ucPermissionService.selectPermissions();
+			data.put("permissionList", ucPermissionMenuActionBo);
+			ro.setData(data);
+			ro.setOspState(200);
+			return JsonUtil.beanToJson(ro);
+		} catch (MyRuntimeException e) {
+			ro.setOspState(400);
+			return JsonUtil.beanToJson(ro);
+		} catch (Exception e) {
+			ro.setOspState(402);
+			e.printStackTrace();
+			return JsonUtil.beanToJson(ro);
+		}
+	}
+	
 	/**
 	 * 添加菜单权限
 	 * 

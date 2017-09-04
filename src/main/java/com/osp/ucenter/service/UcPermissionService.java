@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.osp.ucenter.persistence.bo.UcPermissionBo;
+import com.osp.ucenter.persistence.bo.UcPermissionMenuActionBo;
 import com.osp.ucenter.persistence.model.UcMenu;
 import com.osp.ucenter.persistence.model.UcPermission;
 
@@ -24,6 +25,8 @@ public interface UcPermissionService {
     int updateByPrimaryKey(UcPermission record);
 
 	Map<String, Object> deletePermissionById(String ids);
+	
+	List<UcPermissionMenuActionBo> selectPermissions();
 	
 	List<UcPermissionBo> selectPermissionByRoleId(Integer id);
 	

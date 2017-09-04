@@ -9,7 +9,7 @@ import com.osp.ucenter.persistence.model.UcPermission;
  * 角色权限分配
  * @author zhangmingcheng
  */
-public class UcPermissionBo extends UcPermission implements Serializable {
+public class UcPermissionBo extends UcPermissionMenuActionBo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	/**
 	 * 是否勾选

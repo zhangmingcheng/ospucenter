@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.osp.ucenter.mybatis.page.Pagination;
+import com.osp.ucenter.persistence.bo.UcRolePermissionAllocationBo;
 import com.osp.ucenter.persistence.model.UcRole;
 
 public interface UcRoleService {
@@ -30,9 +31,7 @@ public interface UcRoleService {
 
 	Map<String, Object> deleteRoleById(String ids);
 
-	// Pagination<RolePermissionAllocationBo>
-	// findRoleAndPermissionPage(Map<String, Object> resultMap, Integer pageNo,
-	// Integer pageSize);
+	List<UcRolePermissionAllocationBo> selectPermissionByRoleIds();
 
 	// 根据用户ID查询角色（role），放入到Authorization里。
 	Set<String> findRoleByUserId(Long userId);
