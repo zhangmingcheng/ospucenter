@@ -37,6 +37,12 @@ public class SecurityFilter implements Filter {
 	
 	static {
 		restApp.put("/user/login", 1);
+		restApp.put("/app/test", 1);
+		restApp.put("/app/getKeys", 1);
+		restApp.put("/app/get", 1);
+		restApp.put("/app/test", 1);
+		restApp.put("/app/isKeyExists", 1);
+		restApp.put("/app/getAll", 1);
 		restApp.put("/user/register", 1);
 		restApp.put("/app-name", 1);
 		restApp.put("/user/auth", 1);
@@ -46,6 +52,7 @@ public class SecurityFilter implements Filter {
 		restApp.put("/rolePermission/rolePermissionAllocation", 1);	
 		restApp.put("/user/userLists", 1);
 		restApp.put("/user/onlineUsers", 1);
+		restApp.put("/user/deleteUser", 1);
 		restApp.put("/userRole/allocationLists", 1);
 		restApp.put("/userRole/addRole2User", 1);
 		restApp.put("/userRole/selectRoleByUserId", 1);
