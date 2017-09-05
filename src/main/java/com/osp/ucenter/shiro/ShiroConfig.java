@@ -18,11 +18,11 @@ public class ShiroConfig {
 	private static final Logger log = LoggerFactory.getLogger(ShiroFilterFactoryBean.class);
 
 	@Bean(name = "securityManager")
-	public SecurityManager securityManager(@Qualifier("myAuthorizingRealm") MyAuthorizingRealm myAuthorizingRealm) {
+	public SecurityManager securityManager(@Qualifier("ospAuthorizingRealm") OspAuthorizingRealm ospAuthorizingRealm) {
 		log.info("securityManager()");
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 		// 设置realm.
-		securityManager.setRealm(myAuthorizingRealm);
+		securityManager.setRealm(ospAuthorizingRealm);
 		return securityManager;
 	}
 
@@ -31,10 +31,10 @@ public class ShiroConfig {
 	 * 
 	 * @return
 	 */
-	@Bean(name = "myAuthorizingRealm")
-	public MyAuthorizingRealm myAuthorizingRealm() {
-		MyAuthorizingRealm myAuthorizingRealm = new MyAuthorizingRealm();
-		return myAuthorizingRealm;
+	@Bean(name = "ospAuthorizingRealm")
+	public OspAuthorizingRealm ospAuthorizingRealm() {
+		OspAuthorizingRealm ospAuthorizingRealm = new OspAuthorizingRealm();
+		return ospAuthorizingRealm;
 	}
 
 	/**
