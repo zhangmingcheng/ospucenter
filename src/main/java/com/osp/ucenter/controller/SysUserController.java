@@ -35,19 +35,39 @@ public class SysUserController {
 	UcUserService ucUserService;
 
 	/**
+	 * 禁止登陆
+	 * 
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/forbidUserById", method = { RequestMethod.GET, RequestMethod.POST })
+	public String forbidUserById(String userId) {
+		ResponseObject ro = ResponseObject.getInstance();
+		try {
+			Map<String, Object> data = ucUserService.updateForbidUserById(Integer.valueOf(userId));
+			ro.setOspState((Integer)data.get("status"));
+			return JsonUtil.beanToJson(ro);
+		} catch (Exception e) {
+			ro.setOspState(500);
+			return JsonUtil.beanToJson(ro);
+		}
+	}
+
+	/**
 	 * 用户列表
 	 * 
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/userLists",method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/userLists", method = { RequestMethod.GET, RequestMethod.POST })
 	public String userLists(@RequestBody Pagination<UcUser> pagination) {
 		ResponseObject ro = ResponseObject.getInstance();
 		Map<String, Object> findContent = new HashMap<String, Object>();
 		Map<String, Object> data = new HashMap<String, Object>();
 		try {
 			findContent.put("findContent", pagination.getFindContent());
-			Pagination<UcUser> ucUsers = ucUserService.findPage(findContent, pagination.getPageNo(),pagination.getPageSize());
+			Pagination<UcUser> ucUsers = ucUserService.findPage(findContent, pagination.getPageNo(),
+					pagination.getPageSize());
 			for (UcUser tempUcUser : ucUsers.getList()) {
 				tempUcUser.setUserPwd("");
 			}
@@ -66,12 +86,38 @@ public class SysUserController {
 	}
 
 	/**
+	 * 删除用户，根据ID，删除用户前必须清空用户角色
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/deleteUser", method = { RequestMethod.GET, RequestMethod.POST })
+	@ResponseBody
+	public String deleteRoleById(String ucUserIds,@RequestBody Pagination<UcUser> pagination) {
+		ResponseObject ro = ResponseObject.getInstance();
+		try {
+			Map<String, Object> data = ucUserService.deleteUserById("5");
+			Pagination<UcUser> ucUsers = ucUserService.findPage(new HashMap<String, Object>(), pagination.getPageNo(),
+					pagination.getPageSize());
+			for (UcUser tempUcUser : ucUsers.getList()) {
+				tempUcUser.setUserPwd("");
+			}
+			data.put("ucUser", ucUsers.getList());
+			ro.setOspState(200);
+			ro.setData(data);
+			return JsonUtil.beanToJson(ro);
+		}  catch (Exception e) {
+			ro.setOspState(500);
+			return JsonUtil.beanToJson(ro);
+		}
+	}
+
+	/**
 	 * 在线用户
 	 * 
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/onlineUsers",method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/onlineUsers", method = { RequestMethod.GET, RequestMethod.POST })
 	public String onlineUsers(@RequestBody Pagination<UcUser> pagination) {
 		ResponseObject ro = ResponseObject.getInstance();
 		Map<String, Object> data = new HashMap<String, Object>();
@@ -108,7 +154,7 @@ public class SysUserController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/updateUserInfo",method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/updateUserInfo", method = { RequestMethod.GET, RequestMethod.POST })
 	public String updateUserInfo(@RequestBody UcUser user) {
 		ResponseObject ro = ResponseObject.getInstance();
 		Map<String, Object> data = new HashMap<String, Object>();
@@ -139,17 +185,17 @@ public class SysUserController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/updateUserPsw",method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/updateUserPsw", method = { RequestMethod.GET, RequestMethod.POST })
 	public String updateUserPsw(@RequestBody UcUser user) {
 		ResponseObject ro = ResponseObject.getInstance();
 		Map<String, Object> data = new HashMap<String, Object>();
 		try {
-		    UcUser dbUser = ucUserService.findUser(user.getUserId());
+			UcUser dbUser = ucUserService.findUser(user.getUserId());
 			user = UserManager.md5Pswd(user);
-			if(user.getUserPwd().equals(dbUser.getUserPwd())==false){
-                ro.setOspState(500);	
-            	data.put("ucUser", "原密码不对！！！");
-            	return JsonUtil.beanToJson(ro);
+			if (user.getUserPwd().equals(dbUser.getUserPwd()) == false) {
+				ro.setOspState(500);
+				data.put("ucUser", "原密码不对！！！");
+				return JsonUtil.beanToJson(ro);
 			}
 			user.setUserPwd(UserManager.md5Pswd(user.getUserName(), user.getNewPwd()));
 			int status = ucUserService.updateByPrimaryKeySelective(user);
@@ -178,7 +224,7 @@ public class SysUserController {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/userInfo",method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/userInfo", method = { RequestMethod.GET, RequestMethod.POST })
 	public String userInfo(@RequestBody UcUser user) {
 		ResponseObject ro = ResponseObject.getInstance();
 		Map<String, Object> data = new HashMap<String, Object>();

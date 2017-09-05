@@ -18,12 +18,17 @@
      </foreach>
   </delete>
   <!-- 根据用户roleId查询用户ID -->
-  <select id="findUserIdByRoleId" resultType="long">
-  	select uid from u_user_role where rid =  #{id,jdbcType=INTEGER}
+  <select id="findUserIdByRoleId" resultType="java.lang.Integer">
+  	select user_id from  uc_user_role where role_id =  #{id,jdbcType=INTEGER}
   </select>
-  
+ <!-- 根据userId查询用户 -->
+  <select id="findUserByUserId" resultType="com.osp.ucenter.persistence.model.UcUserRole">
+  	select  
+  	user_id userId,role_id roleId
+  	from uc_user_role where user_id =  #{id,jdbcType=INTEGER}
+  </select>
   <insert id="insert" parameterType="com.osp.ucenter.persistence.model.UcUserRole">
-    insert into uc_user_role (user_id, role_id)
+    insert into uc_user_role (user_id, C)
     values (#{userId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.osp.ucenter.persistence.model.UcUserRole">

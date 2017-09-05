@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.osp.ucenter.common.utils.LoggerUtils;
 import com.osp.ucenter.common.utils.StringUtils;
 import com.osp.ucenter.mybatis.BaseMybatisDao;
 import com.osp.ucenter.mybatis.page.Pagination;
@@ -52,12 +53,6 @@ public class UcUserServiceImpl extends BaseMybatisDao<UcUserMapper> implements U
 	}
 
 	@Override
-	public int deleteByPrimaryKey(Long id) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public int insert(UcUser record) {
 		return ucUserMapper.insert(record);
 	}
@@ -69,9 +64,8 @@ public class UcUserServiceImpl extends BaseMybatisDao<UcUserMapper> implements U
 	}
 
 	@Override
-	public UcUser selectByPrimaryKey(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public UcUser selectByPrimaryKey(Integer id) {
+		return ucUserMapper.selectByPrimaryKey(id);
 	}
 
 	@Override
@@ -86,20 +80,49 @@ public class UcUserServiceImpl extends BaseMybatisDao<UcUserMapper> implements U
 	}
 
 	@Override
-	public UcUser findUser(int userId) {
+	public UcUser findUser(Integer userId) {
 		return ucUserMapper.findUser(userId);
 	}
 
+	/**
+	 * 删除用户 用户必须没有关联角色才能被删除
+	 */
 	@Override
 	public Map<String, Object> deleteUserById(String ids) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String,Object> data = new HashMap<String,Object>();
+		try {
+			int successCount = 0, errorCount = 0;
+			String resultMsg = "删除%s条，失败%s条";
+			String[] idArray = new String[] {};
+			if (StringUtils.contains(ids, ",")) {
+				idArray = ids.split(",");
+			} else {
+				idArray = new String[] { ids };
+			}
+			for (String idx : idArray) {
+				Integer userId = new Integer(idx);			
+				List<UcUserRole> ucUserRoles = ucUserRoleMapper.findUserByUserId(userId);
+				if (null != ucUserRoles && ucUserRoles.size() > 0) {
+					errorCount += ucUserRoles.size();
+				} else {
+					successCount += this.deleteByPrimaryKey(new Integer(userId));
+				}		
+			}
+			// 如果有成功的，也有失败的，提示清楚。
+			if (errorCount > 0) {
+				data.put("ucUserStatus", String.format(resultMsg, successCount, errorCount));
+			} else {
+				data.put("ucUserStatus", "操作成功");
+			}
+		} catch (Exception e) {
+			LoggerUtils.fmtError(getClass(), e, "根据IDS删除用户出现错误，ids[%s]", ids);
+		}
+		return data;
 	}
 
 	@Override
-	public Map<String, Object> updateForbidUserById(Long id, Long status) {
-		// TODO Auto-generated method stub
-		return null;
+	public int deleteByPrimaryKey(Integer id) {
+		return ucUserMapper.deleteByPrimaryKey(id);
 	}
 
 	@Override
@@ -140,22 +163,23 @@ public class UcUserServiceImpl extends BaseMybatisDao<UcUserMapper> implements U
 	 * 根据用户ID删除其绑定的角色信息
 	 */
 	@Override
-	public Map<String, Object> deleteRoleByUserIds(String userIds) {
-		Map<String, Object> data = new HashMap<String, Object>();
-		String[] idArray = null;
+	public Map<String, Object> deleteRoleByUserIds(String userIds) {	
+		
+		Map<String,Object> data = new HashMap<String,Object>();
 		try {
-			if (StringUtils.isNotBlank(userIds)) {
-				if (StringUtils.contains(userIds, ",")) {
-					idArray = userIds.split(",");
-				} else {
-					idArray = new String[] { userIds };
-				}
+			String[] idArray = new String[]{};
+			if(StringUtils.contains(userIds, ",")){
+				idArray = userIds.split(",");
+			}else{
+				idArray = new String[]{userIds};
 			}
-			ucUserRoleMapper.deleteRoleByUserIds(idArray);
-			data.put("ucUserRole", "操作成功");
+			for (String id : idArray) {
+				this.deleteByPrimaryKey(new Integer(id));
+			}
+			data.put("status", 200);
 		} catch (Exception e) {
-			data.put("ucUserRole", "操作失败，请重试！");
-			e.printStackTrace();
+			LoggerUtils.fmtError(getClass(), e, "根据IDS删除用户出现错误，ids[%s]", userIds);
+			data.put("status", 500);
 		}
 		return data;
 	}
@@ -163,6 +187,28 @@ public class UcUserServiceImpl extends BaseMybatisDao<UcUserMapper> implements U
 	@Override
 	public List<UcRoleBo> selectRoleByUserId(Integer id) {
 		return ucUserMapper.selectRoleByUserId(id);
+	}
+
+	/**
+	 * 禁止用户登录
+	 */
+	@Override
+	public Map<String, Object> updateForbidUserById(Integer id) {
+		Map<String, Object> data = new HashMap<String, Object>();
+		try {
+			UcUser ucuser = this.selectByPrimaryKey(id);
+			ucuser.setStatus(0);
+			updateByPrimaryKeySelective(ucuser);
+
+			// 如果当前用户在线，需要标记并且踢出
+			// customSessionManager.forbidUserById(id,status);
+
+			data.put("status", 200);
+		} catch (Exception e) {
+			data.put("status", 500);
+			LoggerUtils.fmtError(getClass(), "禁止或者激活用户登录失败，id[%s],status[%s]", id, 0);
+		}
+		return data;
 	}
 
 }

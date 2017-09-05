@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,6 @@ public class LoginController{
 			UsernamePasswordToken token = new UsernamePasswordToken(username, UserManager.md5Pswd(username, password));
 			currentUser.login(token);
 			// currentUser.hasRole("admin");
-
 			// 获取 菜单
 
 			UcUser ucUser = TokenAuth.getAuthUser(username);
@@ -72,6 +72,9 @@ public class LoginController{
 			}else{
 				ro.setOspState(500);
 			}
+			return JsonUtil.beanToJson(ro);
+		} catch (DisabledAccountException e) {
+			ro.setOspState(500);
 			return JsonUtil.beanToJson(ro);
 		} catch (MyRuntimeException e) {
 			ro.setOspState(400);

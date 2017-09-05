@@ -16,5 +16,5 @@ public interface UcUserRoleMapper {
 
 	int deleteRoleByUserIds(@Param("userIds") String[] userIds);
 
-	List<Integer> findUserIdByRoleId(Integer id);
+	List<UcUserRole> findUserByUserId(Integer id);
 }

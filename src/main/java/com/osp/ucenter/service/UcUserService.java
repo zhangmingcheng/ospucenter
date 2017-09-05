@@ -14,6 +14,8 @@ import com.osp.ucenter.persistence.model.UcUser;
  */
 public interface UcUserService {
 	
+	Map<String, Object> updateForbidUserById(Integer id);
+	
 	Pagination<UserRoleAllocationBo> findUserAndRole(Map<String,Object> modelMap,
 			Integer pageNo, Integer pageSize);
 	
@@ -21,23 +23,21 @@ public interface UcUserService {
 	
 	UcUser login(String username ,String password);
 	
-	int deleteByPrimaryKey(Long id);
+	int deleteByPrimaryKey(Integer id);
 
 	int insert(UcUser record);
 
 	int insertSelective(UcUser record);
 
-	UcUser selectByPrimaryKey(Long id);
+	UcUser selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(UcUser record);
 
     int updateByPrimaryKey(UcUser record);
 
-    UcUser findUser(int userId);
+    UcUser findUser(Integer userId);
 
 	Map<String, Object> deleteUserById(String ids);
-
-	Map<String, Object> updateForbidUserById(Long id, Long status);
 	
 	List<UcRoleBo> selectRoleByUserId(Integer id);
 
